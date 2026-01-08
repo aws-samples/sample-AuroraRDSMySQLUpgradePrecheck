@@ -1,0 +1,19 @@
+# Aurora Upgrade Checker - Python Dependencies
+# MySQL 5.7 to 8.0 Upgrade Assessment Tool
+
+# Core dependencies
+setuptools>=78.1.1  # Security: CVE fixes for path traversal and RCE
+urllib3>=2.6.0      # Security: Fixes for DoS and redirect bypass vulnerabilities
+
+# Database connectivity
+mysql-connector-python>=8.0.33
+
+# AWS SDK for cluster discovery and credential management
+boto3>=1.26.0
+botocore>=1.29.0
+
+# Configuration management
+PyYAML>=6.0
+
+# Optional: Enhanced reporting (if using Jinja2 templates)
+# jinja2>=3.1.2
