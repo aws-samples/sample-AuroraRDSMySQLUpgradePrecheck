@@ -324,11 +324,15 @@ Once all issues are resolved:
 5. **Monitor**: Watch metrics during and after upgrade
 6. **Rollback Plan**: Keep blue environment for quick revert
 
-## 👤 Author
+## 👤 Authors
 
 **Authored by:** Kiran mayee Mulupuru, Sr. Database Specialist TAM
 - **Email:** kiranmam@amazon.com
 - **Role:** Senior Database Specialist, Technical Account Manager
+
+## 👤 Reviewers
+
+**Reviewed by:** Vijay Karumajji, Prin WW SSA MySQL & Abhimanyu Tomar, Sr.STAM-DB (NAMER)
 
 ---
 
