@@ -1,0 +1,75 @@
+{
+  "summary": {
+    "total_databases": 1,
+    "green_databases": 0,
+    "amber_databases": 0,
+    "red_databases": 0,
+    "error_databases": 1
+  },
+  "databases": {
+    "ams5744-2123": {
+      "status": "ERROR",
+      "message": "No secret configured for cluster 'ams5744-2123'. Add it to config.yaml under authentication.secrets",
+      "checks": []
+    }
+  },
+  "generated_at": "2026-01-08T17:18:47.562706",
+  "detailed_summary": {
+    "overview": {
+      "total_databases": 1,
+      "databases_needing_upgrade": 0,
+      "databases_needing_parameter_updates": 0,
+      "aurora_clusters": [],
+      "rds_instances": [],
+      "status": "GREEN",
+      "total_issues": 0,
+      "blocking_issues": 0,
+      "warnings": 0
+    },
+    "upgrade_path": {
+      "immediate_actions": [],
+      "upgrade_order": [],
+      "parameter_changes": {
+        "aurora": {
+          "log_bin_trust_function_creators": "ON",
+          "character_set_server": "utf8mb4",
+          "collation_server": "utf8mb4_0900_ai_ci"
+        },
+        "rds": {
+          "binlog_format": "ROW",
+          "log_bin_trust_function_creators": "ON",
+          "character_set_server": "utf8mb4",
+          "collation_server": "utf8mb4_0900_ai_ci",
+          "max_allocated_packet": "67108864(64MB)",
+          "table_open_cache": "4000",
+          "explicit_defaults_for_timestamp": "ON"
+        }
+      }
+    },
+    "common_issues": [],
+    "recommendations": {
+      "pre_upgrade": [
+        "Update parameter groups with recommended settings",
+        "Take full backup of all databases",
+        "Convert character sets to utf8mb4 where needed",
+        "Make sure that the instance have enough resources (CPU, Memory, IOPS, storage) for the upgrade process",
+        "Ensure there are no long-running transaction",
+        "Make sure HLL is not high"
+      ],
+      "during_upgrade": [
+        "Follow upgrade order as specified",
+        "Test each upgrade in non-production first",
+        "Monitor replication lag during upgrades",
+        "Verify application compatibility",
+        "Have rollback plan ready"
+      ],
+      "post_upgrade": [
+        "Verify all stored procedures and views",
+        "Check application performance",
+        "Update monitoring and alerts",
+        "Review and update backup strategies",
+        "Document changes and lessons learned"
+      ]
+    }
+  }
+}

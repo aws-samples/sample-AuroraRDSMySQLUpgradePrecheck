@@ -1,0 +1,1468 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MySQL Upgrade Assessment Report</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            color: #2c3e50;
+            line-height: 1.6;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+            overflow: hidden;
+        }
+
+        /* Header Section */
+        .header {
+            background: linear-gradient(135deg, #232f3e 0%, #3a4f66 100%);
+            color: white;
+            padding: 40px 50px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -10%;
+            width: 400px;
+            height: 400px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 50%;
+        }
+
+        .header-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .header h1 {
+            font-size: 36px;
+            font-weight: 700;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .header-icon {
+            font-size: 48px;
+        }
+
+        .customer-banner {
+            background: linear-gradient(90deg, rgba(255, 215, 0, 0.15) 0%, rgba(255, 215, 0, 0.05) 100%);
+            border-left: 4px solid #FFD700;
+            padding: 12px 20px;
+            margin-bottom: 25px;
+            border-radius: 8px;
+            backdrop-filter: blur(10px);
+        }
+
+        .customer-label {
+            font-size: 11px;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            color: rgba(255, 255, 255, 0.7);
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .customer-name {
+            font-size: 24px;
+            font-weight: 700;
+            color: #FFD700;
+            letter-spacing: 0.5px;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .header-meta {
+            display: flex;
+            gap: 30px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+        }
+
+        /* Executive Dashboard */
+        .dashboard {
+            padding: 50px;
+            background: linear-gradient(to bottom, #ffffff 0%, #f8f9fa 100%);
+        }
+
+        .dashboard-title {
+            font-size: 28px;
+            font-weight: 700;
+            color: #232f3e;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+
+        .metric-card {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            border-left: 5px solid;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .metric-card.clickable {
+            cursor: pointer;
+        }
+
+        .metric-card.clickable:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+        }
+
+        .metric-card.status-red { border-left-color: #e74c3c; }
+        .metric-card.status-amber { border-left-color: #f39c12; }
+        .metric-card.status-green { border-left-color: #27ae60; }
+        .metric-card.status-blue { border-left-color: #3498db; }
+
+        .metric-label {
+            font-size: 13px;
+            color: #7f8c8d;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .metric-value {
+            font-size: 42px;
+            font-weight: 700;
+            color: #2c3e50;
+            line-height: 1;
+        }
+
+        .metric-description {
+            font-size: 13px;
+            color: #95a5a6;
+            margin-top: 8px;
+        }
+
+        /* Readiness Score Circle */
+        .readiness-section {
+            text-align: center;
+            margin: 50px 0;
+            padding: 40px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+        }
+
+        .readiness-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: #232f3e;
+            margin-bottom: 30px;
+        }
+
+        .score-circle {
+            position: relative;
+            width: 200px;
+            height: 200px;
+            margin: 0 auto 20px;
+        }
+
+        .score-svg {
+            transform: rotate(-90deg);
+        }
+
+        .score-circle-bg {
+            fill: none;
+            stroke: #ecf0f1;
+            stroke-width: 20;
+        }
+
+        .score-circle-progress {
+            fill: none;
+            stroke-width: 20;
+            stroke-linecap: round;
+            transition: stroke-dashoffset 1s ease;
+        }
+
+        .score-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 48px;
+            font-weight: 700;
+            color: #2c3e50;
+        }
+
+        .score-label {
+            font-size: 16px;
+            color: #7f8c8d;
+            font-weight: 600;
+        }
+
+        /* Status Badge */
+        .status-badge {
+            display: inline-block;
+            padding: 12px 24px;
+            border-radius: 25px;
+            font-weight: 700;
+            font-size: 16px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin: 20px 0;
+        }
+
+        .status-badge.red { background: #e74c3c; color: white; }
+        .status-badge.amber { background: #f39c12; color: white; }
+        .status-badge.green { background: #27ae60; color: white; }
+
+        /* Immediate Actions */
+        .immediate-actions {
+            background: linear-gradient(135deg, #fff5f5 0%, #ffe5e5 100%);
+            border: 2px solid #e74c3c;
+            border-radius: 12px;
+            padding: 30px;
+            margin: 30px 0;
+            box-shadow: 0 4px 15px rgba(231, 76, 60, 0.15);
+        }
+
+        .immediate-actions h3 {
+            color: #c0392b;
+            font-size: 22px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .immediate-actions ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .immediate-actions li {
+            background: white;
+            padding: 16px 20px;
+            margin: 12px 0;
+            border-left: 5px solid #e74c3c;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            transition: transform 0.2s ease;
+        }
+
+        .immediate-actions li:hover {
+            transform: translateX(5px);
+        }
+
+        .immediate-actions li::before {
+            content: "⚠️";
+            font-size: 18px;
+            margin-right: 12px;
+        }
+
+        .immediate-actions li strong {
+            color: #c0392b;
+            display: block;
+            margin-bottom: 6px;
+            font-size: 16px;
+        }
+
+        /* Content Section */
+        .content {
+            padding: 50px;
+        }
+
+        .section-title {
+            font-size: 26px;
+            font-weight: 700;
+            color: #232f3e;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 3px solid #3498db;
+        }
+
+        /* Filter Buttons */
+        .filter-bar {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin: 30px 0;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 12px;
+        }
+
+        .filter-btn {
+            padding: 12px 24px;
+            border: 2px solid #dfe6e9;
+            background: white;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .filter-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .filter-btn.active {
+            background: #232f3e;
+            color: white;
+            border-color: #232f3e;
+        }
+
+        .filter-count {
+            background: rgba(0, 0, 0, 0.1);
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 13px;
+        }
+
+        .filter-btn.active .filter-count {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        /* Check Items */
+        .check-item {
+            background: white;
+            margin: 20px 0;
+            border-radius: 12px;
+            border-left: 6px solid;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+            overflow: hidden;
+        }
+
+        .check-item.hidden {
+            display: none !important;
+        }
+
+        .check-item:hover {
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+        }
+
+        .check-item.red {
+            border-left-color: #e74c3c;
+        }
+
+        .check-item.amber {
+            border-left-color: #f39c12;
+        }
+
+        .check-item.green {
+            border-left-color: #27ae60;
+        }
+
+        .check-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 25px 30px;
+            cursor: pointer;
+            background: linear-gradient(to right, rgba(0,0,0,0.02) 0%, white 20%);
+        }
+
+        .check-header:hover {
+            background: linear-gradient(to right, rgba(0,0,0,0.03) 0%, white 20%);
+        }
+
+        .check-icon {
+            font-size: 28px;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 12px;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+
+        .check-icon.red {
+            background: #ffe5e5;
+            color: #e74c3c;
+        }
+
+        .check-icon.amber {
+            background: #fff4e5;
+            color: #f39c12;
+        }
+
+        .check-icon.green {
+            background: #e5ffe5;
+            color: #27ae60;
+        }
+
+        .check-title {
+            flex: 1;
+        }
+
+        .check-name {
+            font-size: 20px;
+            font-weight: 700;
+            color: #2c3e50;
+            margin-bottom: 4px;
+        }
+
+        .check-description {
+            font-size: 14px;
+            color: #7f8c8d;
+            font-style: italic;
+            line-height: 1.5;
+        }
+
+        .check-badge {
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            flex-shrink: 0;
+        }
+
+        .check-badge.red {
+            background: #e74c3c;
+            color: white;
+        }
+
+        .check-badge.amber {
+            background: #f39c12;
+            color: white;
+        }
+
+        .check-badge.green {
+            background: #27ae60;
+            color: white;
+        }
+
+        .expand-icon {
+            font-size: 20px;
+            transition: transform 0.3s ease;
+            flex-shrink: 0;
+        }
+
+        .check-item.collapsed .expand-icon {
+            transform: rotate(0deg);
+        }
+
+        .check-content {
+            max-height: 5000px;
+            overflow: visible;
+            transition: max-height 0.3s ease;
+            padding: 0 30px 30px 30px;
+        }
+
+        .check-item.collapsed .check-content {
+            max-height: 0;
+            overflow: hidden;
+            padding: 0 30px;
+        }
+
+        .issues-section {
+            margin: 20px 0;
+        }
+
+        .issues-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: #2c3e50;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .issues-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .issues-list li {
+            padding: 12px 16px;
+            margin: 8px 0;
+            background: #f8f9fa;
+            border-radius: 6px;
+            border-left: 3px solid #e74c3c;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .success-message {
+            background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+            color: #27ae60;
+            padding: 16px 20px;
+            border-radius: 8px;
+            border-left: 4px solid #27ae60;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 15px 0;
+        }
+
+        .recommendations-section {
+            margin: 20px 0;
+            background: #f0f8ff;
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 4px solid #3498db;
+        }
+
+        .recommendations-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: #2980b9;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .recommendations-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .recommendations-list li {
+            padding: 10px 0;
+            border-bottom: 1px solid #d6eaf8;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .recommendations-list li:last-child {
+            border-bottom: none;
+        }
+
+        .recommendations-list li::before {
+            content: "💡";
+            margin-right: 10px;
+        }
+
+        /* Footer */
+        .footer {
+            background: #2c3e50;
+            color: white;
+            padding: 30px 50px;
+            text-align: center;
+            font-size: 14px;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .header, .dashboard, .content, .footer {
+                padding: 30px 20px;
+            }
+
+            .header h1 {
+                font-size: 28px;
+            }
+
+            .metrics-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .filter-bar {
+                flex-direction: column;
+            }
+
+            .filter-btn {
+                width: 100%;
+            }
+
+            .check-header {
+                flex-wrap: wrap;
+            }
+        }
+
+        /* Risk Assessment Matrix */
+        .risk-matrix-section {
+            background: white;
+            border-radius: 12px;
+            padding: 40px;
+            margin: 40px 50px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+        }
+
+        .risk-matrix-title {
+            font-size: 26px;
+            font-weight: 700;
+            color: #232f3e;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 3px solid #3498db;
+        }
+
+        .risk-matrix-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-top: 30px;
+        }
+
+        .risk-level-card {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            border: 2px solid;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .risk-level-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .risk-level-card.critical {
+            border-color: #e74c3c;
+            background: linear-gradient(135deg, #fff5f5 0%, white 100%);
+        }
+
+        .risk-level-card.medium {
+            border-color: #f39c12;
+            background: linear-gradient(135deg, #fff9f0 0%, white 100%);
+        }
+
+        .risk-level-card.low {
+            border-color: #27ae60;
+            background: linear-gradient(135deg, #f0fff0 0%, white 100%);
+        }
+
+        .risk-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 15px;
+        }
+
+        .risk-icon {
+            font-size: 32px;
+        }
+
+        .risk-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: #2c3e50;
+        }
+
+        .risk-label {
+            display: inline-block;
+            padding: 6px 14px;
+            border-radius: 15px;
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            margin-bottom: 15px;
+        }
+
+        .risk-label.critical { background: #e74c3c; color: white; }
+        .risk-label.medium { background: #f39c12; color: white; }
+        .risk-label.low { background: #27ae60; color: white; }
+
+        .risk-description {
+            font-size: 14px;
+            color: #7f8c8d;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+
+        .risk-actions {
+            font-size: 14px;
+            color: #2c3e50;
+            font-weight: 600;
+            margin-top: 12px;
+        }
+
+        .risk-actions ul {
+            margin-top: 8px;
+            padding-left: 20px;
+            color: #7f8c8d;
+            font-weight: 400;
+        }
+
+        .risk-actions li {
+            margin: 6px 0;
+        }
+
+        /* Upgrade Strategy Section */
+        .upgrade-strategy-section {
+            background: linear-gradient(135deg, #232f3e 0%, #3a4f66 100%);
+            color: white;
+            padding: 50px;
+            margin: 0;
+        }
+
+        .upgrade-strategy-title {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .upgrade-strategy-intro {
+            font-size: 16px;
+            line-height: 1.8;
+            margin-bottom: 35px;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .strategy-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            margin-top: 30px;
+        }
+
+        .strategy-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 12px;
+            padding: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .strategy-card:hover {
+            background: rgba(255, 255, 255, 0.15);
+            transform: translateY(-5px);
+        }
+
+        .strategy-card.featured {
+            background: rgba(255, 255, 255, 0.15);
+            border: 2px solid rgba(52, 152, 219, 0.5);
+            box-shadow: 0 8px 30px rgba(52, 152, 219, 0.2);
+        }
+
+        .strategy-card.featured:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-3px);
+            box-shadow: 0 12px 40px rgba(52, 152, 219, 0.3);
+        }
+
+        .strategy-card-title {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .strategy-card-content {
+            font-size: 14px;
+            line-height: 1.7;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .strategy-card-content ul {
+            margin: 12px 0;
+            padding-left: 20px;
+        }
+
+        .strategy-card-content li {
+            margin: 8px 0;
+        }
+
+        .aws-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 10px 18px;
+            border-radius: 8px;
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 14px;
+            margin-top: 15px;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .aws-link:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateX(5px);
+        }
+
+        .prerequisites-box {
+            background: rgba(52, 152, 219, 0.2);
+            border-left: 4px solid #3498db;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+
+        .prerequisites-title {
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            color: #3498db;
+        }
+
+        .prerequisites-box ul {
+            margin: 0;
+            padding-left: 20px;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .benefits-box {
+            background: rgba(39, 174, 96, 0.2);
+            border-left: 4px solid #27ae60;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+
+        .benefits-title {
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            color: #27ae60;
+        }
+
+        .benefits-box ul {
+            margin: 0;
+            padding-left: 20px;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        /* Print Styles */
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+            }
+
+            .container {
+                box-shadow: none;
+            }
+
+            .filter-bar {
+                display: none;
+            }
+
+            .check-item {
+                page-break-inside: avoid;
+            }
+
+            .check-content {
+                max-height: none !important;
+                padding: 0 30px 30px 30px !important;
+            }
+
+            .expand-icon {
+                display: none;
+            }
+
+            .upgrade-strategy-section {
+                background: #232f3e;
+                color: white;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <div class="header-content">
+                
+                <h1>
+                    <span class="header-icon">🗄️</span>
+                    MySQL Upgrade Assessment Report
+                </h1>
+                <div class="header-meta">
+                    <div class="meta-item">
+                        <span>📊</span>
+                        <span><strong>Cluster:</strong> ams5744-2123</span>
+                    </div>
+                    <div class="meta-item">
+                        <span>🔢</span>
+                        <span><strong>Version:</strong> Unknown</span>
+                    </div>
+                    <div class="meta-item">
+                        <span>📅</span>
+                        <span><strong>Generated:</strong> 2026-01-08 17:18:47</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Executive Dashboard -->
+        <div class="dashboard">
+            <h2 class="dashboard-title">Executive Dashboard</h2>
+
+            <div class="metrics-grid">
+                <div class="metric-card status-blue clickable" onclick="scrollToFindings();filterChecks('all');">
+                    <div class="metric-label">Total Checks</div>
+                    <div class="metric-value">20</div>
+                    <div class="metric-description">Click to view all checks</div>
+                </div>
+
+                <div class="metric-card status-red clickable" onclick="scrollToFindings();filterChecks('red');">
+                    <div class="metric-label">Critical Issues</div>
+                    <div class="metric-value">0</div>
+                    <div class="metric-description">Click to view critical issues</div>
+                </div>
+
+                <div class="metric-card status-amber clickable" onclick="scrollToFindings();filterChecks('amber');">
+                    <div class="metric-label">Warnings</div>
+                    <div class="metric-value">0</div>
+                    <div class="metric-description">Click to view warnings</div>
+                </div>
+
+                <div class="metric-card status-green clickable" onclick="scrollToFindings();filterChecks('green');">
+                    <div class="metric-label">Passed Checks</div>
+                    <div class="metric-value">0</div>
+                    <div class="metric-description">Click to view passed checks</div>
+                </div>
+            </div>
+
+            <!-- Readiness Score -->
+            <div class="readiness-section">
+                <h3 class="readiness-title">Upgrade Readiness Score</h3>
+                <div class="score-circle">
+                    <svg class="score-svg" width="200" height="200">
+                        <circle class="score-circle-bg" cx="100" cy="100" r="80"></circle>
+                        <circle class="score-circle-progress" cx="100" cy="100" r="80"
+                                stroke="#27ae60"
+                                stroke-dasharray="502.4"
+                                stroke-dashoffset="0.0">
+                        </circle>
+                    </svg>
+                    <div class="score-text">100%</div>
+                </div>
+                <div class="status-badge green">GREEN</div>
+                <p class="score-label">Overall System Readiness</p>
+            </div>
+
+        </div>
+
+        <!-- Risk Assessment Matrix -->
+        <div class="risk-matrix-section">
+            <h2 class="risk-matrix-title">Risk Assessment Matrix</h2>
+            <p style="font-size: 16px; color: #7f8c8d; margin-bottom: 25px;">
+                Understanding the risk levels associated with each assessment finding helps prioritize remediation efforts and plan upgrade timelines effectively.
+            </p>
+
+            <div class="risk-matrix-grid">
+                <!-- Critical Risk -->
+                <div class="risk-level-card critical">
+                    <div class="risk-header">
+                        <span class="risk-icon">🔴</span>
+                        <span class="risk-title">Critical Risk</span>
+                    </div>
+                    <div class="risk-label critical">High Priority</div>
+                    <div class="risk-description">
+                        Issues that will prevent successful upgrade or cause immediate failures after migration. These are blocking issues that must be resolved before proceeding.
+                    </div>
+                    <div class="risk-actions">
+                        Required Actions:
+                        <ul>
+                            <li>Must be fixed before upgrade attempt</li>
+                            <li>Allocate immediate development resources</li>
+                            <li>Test fixes thoroughly in staging environment</li>
+                            <li>Document resolution and validation steps</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Medium Risk -->
+                <div class="risk-level-card medium">
+                    <div class="risk-header">
+                        <span class="risk-icon">🟡</span>
+                        <span class="risk-title">Medium Risk</span>
+                    </div>
+                    <div class="risk-label medium">Moderate Priority</div>
+                    <div class="risk-description">
+                        Potential compatibility issues or deprecation warnings that should be addressed to ensure optimal performance and maintainability post-upgrade.
+                    </div>
+                    <div class="risk-actions">
+                        Recommended Actions:
+                        <ul>
+                            <li>Address before upgrade for best results</li>
+                            <li>May be deferred if timeline is critical</li>
+                            <li>Monitor closely in production after upgrade</li>
+                            <li>Plan remediation within 30-60 days post-upgrade</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Low Risk -->
+                <div class="risk-level-card low">
+                    <div class="risk-header">
+                        <span class="risk-icon">🟢</span>
+                        <span class="risk-title">Low Risk</span>
+                    </div>
+                    <div class="risk-label low">Ready</div>
+                    <div class="risk-description">
+                        Checks that passed successfully, indicating compatibility with MySQL 8.0. These areas are ready for upgrade with no immediate action required.
+                    </div>
+                    <div class="risk-actions">
+                        Status:
+                        <ul>
+                            <li>No immediate action required</li>
+                            <li>Continue following best practices</li>
+                            <li>Include in post-upgrade validation testing</li>
+                            <li>Monitor for any unexpected behavior</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Upgrade Strategy & AWS Resources -->
+        <div class="upgrade-strategy-section">
+            <h2 class="upgrade-strategy-title">
+                <span>🚀</span>
+                Upgrade Strategy & Resources
+            </h2>
+            <p class="upgrade-strategy-intro">
+                Once all critical issues are resolved and your system achieves a high readiness score, you can proceed with the upgrade using AWS RDS Blue/Green Deployment for a safe, low-risk migration path with minimal downtime.
+            </p>
+
+            <!-- Featured: AWS RDS Blue/Green Deployment (Full Width) -->
+            <div class="strategy-card featured" style="margin-top: 30px;">
+                <h3 class="strategy-card-title" style="font-size: 24px;">
+                    <span>🔵🟢</span>
+                    AWS RDS Blue/Green Deployment
+                </h3>
+                <div class="strategy-card-content">
+                    <p style="margin-bottom: 20px; font-size: 15px;">
+                        AWS RDS Blue/Green Deployments enable safer, simpler, and faster updates to your RDS database instances. This fully managed feature creates a staging environment (green) that mirrors your production (blue), allowing you to test upgrades with zero impact on production.
+                    </p>
+
+                    <div class="benefits-box">
+                        <div class="benefits-title">✓ Key Benefits</div>
+                        <ul>
+                            <li><strong>Zero Downtime:</strong> Switch over in as little as 1 minute</li>
+                            <li><strong>Fast Rollback:</strong> Quick revert if issues detected</li>
+                            <li><strong>Safe Testing:</strong> Validate upgrade in production-like environment</li>
+                            <li><strong>Automated:</strong> AWS handles replication and synchronization</li>
+                            <li><strong>Cost Effective:</strong> Pay only for green environment during testing</li>
+                        </ul>
+                    </div>
+
+                    <a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/blue-green-deployments.html" class="aws-link" target="_blank">
+                        📚 View AWS Documentation
+                        <span>→</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Action Cards Grid (3 columns) -->
+            <div class="strategy-grid">
+                <!-- Prerequisites & Planning -->
+                <div class="strategy-card">
+                    <h3 class="strategy-card-title">
+                        <span>📋</span>
+                        Prerequisites & Planning
+                    </h3>
+                    <div class="strategy-card-content">
+                        <p style="margin-bottom: 15px;">
+                            Before creating a Blue/Green Deployment, ensure your environment meets the requirements and you have a solid rollout plan.
+                        </p>
+
+                        <div class="prerequisites-box">
+                            <div class="prerequisites-title">📌 Prerequisites</div>
+                            <ul>
+                                <li>RDS MySQL 5.7 instance (source)</li>
+                                <li>Automated backups enabled</li>
+                                <li>Sufficient AWS quota for duplicate resources</li>
+                                <li>All critical issues from this report resolved</li>
+                                <li>Application compatibility validated</li>
+                            </ul>
+                        </div>
+
+                        <a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/blue-green-deployments-creating.html" class="aws-link" target="_blank">
+                            🔧 Creating Blue/Green Deployments
+                            <span>→</span>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Step-by-Step Process -->
+                <div class="strategy-card">
+                    <h3 class="strategy-card-title">
+                        <span>⚙️</span>
+                        Deployment Process
+                    </h3>
+                    <div class="strategy-card-content">
+                        <p style="margin-bottom: 15px;">
+                            Follow this proven workflow for a successful MySQL 8.0 upgrade using Blue/Green Deployment:
+                        </p>
+
+                        <ol style="padding-left: 20px; line-height: 2;">
+                            <li><strong>Create Blue/Green Deployment</strong> - AWS clones your production environment</li>
+                            <li><strong>Apply MySQL 8.0 Upgrade</strong> - Upgrade the green environment to MySQL 8.0</li>
+                            <li><strong>Test Thoroughly</strong> - Run full regression and integration tests</li>
+                            <li><strong>Monitor Performance</strong> - Compare metrics between blue and green</li>
+                            <li><strong>Switchover</strong> - Promote green to production when ready</li>
+                            <li><strong>Monitor Post-Upgrade</strong> - Watch for any issues, rollback if needed</li>
+                        </ol>
+
+                        <a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/blue-green-deployments-switching.html" class="aws-link" target="_blank">
+                            🔄 Switching Over Deployments
+                            <span>→</span>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Additional Resources -->
+                <div class="strategy-card">
+                    <h3 class="strategy-card-title">
+                        <span>📖</span>
+                        Additional Resources
+                    </h3>
+                    <div class="strategy-card-content">
+                        <p style="margin-bottom: 15px;">
+                            Comprehensive AWS documentation and best practices for MySQL upgrades:
+                        </p>
+
+                        <div style="display: flex; flex-direction: column; gap: 12px;">
+                            <a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/blue-green-deployments-overview.html" class="aws-link" target="_blank">
+                                📘 Blue/Green Deployments Overview
+                                <span>→</span>
+                            </a>
+
+                            <a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_UpgradeDBInstance.MySQL.html" class="aws-link" target="_blank">
+                                🔼 Upgrading MySQL DB Engine
+                                <span>→</span>
+                            </a>
+
+                            <a href="https://aws.amazon.com/blogs/database/amazon-aurora-mysql-version-2-with-mysql-5-7-compatibility-to-version-3-with-mysql-8-0-compatibility-upgrade-checklist-part-1/" class="aws-link" target="_blank">
+                                ✅ Aurora MySQL 5.7 → 8.0 Checklist (Part 1)
+                                <span>→</span>
+                            </a>
+
+                            <a href="https://aws.amazon.com/blogs/database/amazon-aurora-mysql-version-2-with-mysql-5-7-compatibility-to-version-3-with-mysql-8-0-compatibility-upgrade-checklist-part-2/" class="aws-link" target="_blank">
+                                ✅ Aurora MySQL 5.7 → 8.0 Checklist (Part 2)
+                                <span>→</span>
+                            </a>
+
+                            <a href="https://aws.amazon.com/blogs/database/upgrade-to-amazon-aurora-mysql-version-3-with-mysql-8-0-compatibility/" class="aws-link" target="_blank">
+                                🚀 Upgrade to Aurora MySQL 8.0 Guide
+                                <span>→</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Call to Action: Your Upgrade Roadmap -->
+            <div style="margin-top: 50px; padding: 40px; background: linear-gradient(135deg, rgba(52, 152, 219, 0.25) 0%, rgba(46, 204, 113, 0.25) 100%); border-radius: 12px; border: 3px solid rgba(52, 152, 219, 0.5); box-shadow: 0 8px 30px rgba(52, 152, 219, 0.3);">
+                <div style="text-align: center; margin-bottom: 25px;">
+                    <h3 style="font-size: 28px; font-weight: 700; margin-bottom: 10px; display: inline-flex; align-items: center; gap: 12px;">
+                        <span>🚀</span>
+                        Ready to Upgrade? Your Complete Roadmap
+                        <span>🚀</span>
+                    </h3>
+                    <p style="font-size: 16px; line-height: 1.8; color: rgba(255, 255, 255, 0.95); margin-top: 15px; max-width: 900px; margin-left: auto; margin-right: auto;">
+                        Once you have addressed all critical issues and achieved a readiness score of <strong>80% or higher</strong>, follow this proven roadmap to execute a safe, successful upgrade to MySQL 8.0.
+                    </p>
+                </div>
+                <ol style="padding-left: 20px; font-size: 15px; line-height: 2.2; color: rgba(255, 255, 255, 0.95); max-width: 1000px; margin: 0 auto;">
+                    <li><strong>✓ Validate Fixes:</strong> Re-run this assessment tool to confirm all issues are resolved</li>
+                    <li><strong>✓ Test Application:</strong> Validate application compatibility in a test environment</li>
+                    <li><strong>✓ Backup Production:</strong> Create a manual snapshot of your production database</li>
+                    <li><strong>✓ Create Blue/Green Deployment:</strong> Use AWS Console or CLI to create the deployment</li>
+                    <li><strong>✓ Upgrade Green Environment:</strong> Apply MySQL 8.0 upgrade to the green instance</li>
+                    <li><strong>✓ Comprehensive Testing:</strong> Run full test suite against the green environment</li>
+                    <li><strong>✓ Performance Validation:</strong> Compare query performance between blue and green</li>
+                    <li><strong>✓ Switchover:</strong> Execute the switchover during a maintenance window</li>
+                    <li><strong>✓ Monitor Production:</strong> Watch metrics and logs closely for 24-48 hours</li>
+                    <li><strong>✓ Decommission Blue:</strong> Once stable, delete the blue environment to stop billing</li>
+                </ol>
+                <div style="margin-top: 30px; padding-top: 25px; border-top: 1px solid rgba(255, 255, 255, 0.2); text-align: center;">
+                    <p style="font-size: 16px; color: rgba(255, 255, 255, 0.95); font-weight: 600; margin-bottom: 15px;">
+                        💡 Pro Tip: Document each step and maintain a rollback plan throughout the process
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Detailed Findings -->
+        <div class="content">
+            <h2 class="section-title">Detailed Findings</h2>
+
+            <div class="filter-bar">
+                <button class="filter-btn active" onclick="filterChecks('all')">
+                    <span>All Checks</span>
+                    <span class="filter-count">20</span>
+                </button>
+                <button class="filter-btn" onclick="filterChecks('red')">
+                    <span>🔴 Critical</span>
+                    <span class="filter-count">0</span>
+                </button>
+                <button class="filter-btn" onclick="filterChecks('amber')">
+                    <span>🟡 Warnings</span>
+                    <span class="filter-count">0</span>
+                </button>
+                <button class="filter-btn" onclick="filterChecks('green')">
+                    <span>🟢 Passed</span>
+                    <span class="filter-count">0</span>
+                </button>
+            </div>
+
+            <div id="findings">
+
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <p>MySQL 5.7 to 8.0 Upgrade Assessment Tool</p>
+            <p>Generated automatically for enterprise compliance and planning</p>
+        </div>
+    </div>
+
+    <script>
+        // Debug function to check all item states
+        function debugItems() {
+            var items = document.querySelectorAll('.check-item');
+            console.log('=== DEBUG: ALL ITEMS ===');
+            for (var i = 0; i < items.length; i++) {
+                var item = items[i];
+                var name = item.querySelector('.check-name');
+                var status = item.className.match(/(red|amber|green)/);
+                var computedStyle = window.getComputedStyle(item);
+                var rect = item.getBoundingClientRect();
+                console.log('Item', i, ':', {
+                    name: name ? name.textContent : 'N/A',
+                    status: status ? status[0] : 'N/A',
+                    display: computedStyle.display,
+                    visibility: computedStyle.visibility,
+                    hasHidden: item.classList.contains('hidden'),
+                    hasCollapsed: item.classList.contains('collapsed'),
+                    height: rect.height + 'px',
+                    width: rect.width + 'px',
+                    top: rect.top,
+                    left: rect.left,
+                    inViewport: rect.top >= 0 && rect.left >= 0 && rect.bottom <= window.innerHeight && rect.right <= window.innerWidth
+                });
+            }
+            console.log('=== END DEBUG ===');
+        }
+
+        // Scroll to findings section
+        function scrollToFindings() {
+            var findingsSection = document.getElementById('findings');
+            if (findingsSection) {
+                findingsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        }
+
+        // Scroll to specific check by name
+        function scrollToCheck(checkName) {
+            var allChecks = document.querySelectorAll('.check-item');
+            for (var i = 0; i < allChecks.length; i++) {
+                var nameElement = allChecks[i].querySelector('.check-name');
+                if (nameElement && nameElement.textContent.trim() === checkName) {
+                    // First, make sure it's visible (might be filtered)
+                    allChecks[i].classList.remove('hidden');
+
+                    // Expand it
+                    allChecks[i].classList.remove('collapsed');
+                    var expandIcon = allChecks[i].querySelector('.expand-icon');
+                    if (expandIcon) {
+                        expandIcon.textContent = '▲';
+                    }
+
+                    // Scroll to it
+                    setTimeout(function() {
+                        allChecks[i].scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+                        // Highlight it briefly
+                        allChecks[i].style.boxShadow = '0 0 0 4px rgba(231, 76, 60, 0.3)';
+                        setTimeout(function() {
+                            allChecks[i].style.boxShadow = '';
+                        }, 2000);
+                    }, 300);
+                    break;
+                }
+            }
+        }
+
+        // Filter checks by category
+        function filterChecks(category) {
+            console.log('=== FILTER START v3 ===');
+            console.log('Filtering by category:', category);
+
+            // Update button states ONLY if called from filter bar
+            try {
+                if (window.event && window.event.target && window.event.target.classList.contains('filter-btn')) {
+                    var buttons = document.querySelectorAll('.filter-btn');
+                    for (var i = 0; i < buttons.length; i++) {
+                        buttons[i].classList.remove('active');
+                    }
+                    window.event.target.classList.add('active');
+                }
+            } catch(e) {
+                console.log('Button state update skipped:', e);
+            }
+
+            // Get all check items
+            var items = document.querySelectorAll('.check-item');
+            console.log('Total check items found:', items.length);
+
+            var visibleCount = 0;
+
+            // Process each item - DON'T clear styles, just show/hide
+            for (var i = 0; i < items.length; i++) {
+                var item = items[i];
+                var classes = item.className;
+
+                // Determine if item should be shown
+                var shouldShow = false;
+                if (category === 'all') {
+                    shouldShow = true;
+                } else if (category === 'red' && classes.indexOf('red') !== -1) {
+                    shouldShow = true;
+                } else if (category === 'amber' && classes.indexOf('amber') !== -1) {
+                    shouldShow = true;
+                } else if (category === 'green' && classes.indexOf('green') !== -1) {
+                    shouldShow = true;
+                }
+
+                if (shouldShow) {
+                    // Just remove hidden class - keep all initialization styles intact
+                    item.classList.remove('hidden');
+                    item.classList.remove('collapsed');
+
+                    // Update icon
+                    var expandIcon = item.querySelector('.expand-icon');
+                    if (expandIcon) {
+                        expandIcon.textContent = '▲';
+                    }
+
+                    visibleCount++;
+                    var checkName = item.querySelector('.check-name');
+                    console.log('✓ Showing item', i, '- Status:', classes.match(/(red|amber|green)/)[0],
+                               '- Name:', checkName ? checkName.textContent : 'N/A',
+                               '- Height:', item.offsetHeight + 'px');
+                } else {
+                    // Hide the item
+                    item.classList.add('hidden');
+                    item.classList.add('collapsed');
+                    console.log('✗ Hiding item', i, '- Status:', classes.match(/(red|amber|green)/)[0]);
+                }
+            }
+
+            console.log('Visible items:', visibleCount);
+            console.log('=== FILTER END ===');
+        }
+
+        // Toggle check details (expand/collapse)
+        function toggleCheck(element) {
+            var checkItem = element.closest('.check-item');
+            checkItem.classList.toggle('collapsed');
+
+            var checkContent = checkItem.querySelector('.check-content');
+            var expandIcon = checkItem.querySelector('.expand-icon');
+
+            if (checkItem.classList.contains('collapsed')) {
+                // Collapsed - hide content
+                expandIcon.textContent = '▼';
+                if (checkContent) {
+                    checkContent.style.maxHeight = '0';
+                    checkContent.style.overflow = 'hidden';
+                    checkContent.style.padding = '0 30px';
+                }
+            } else {
+                // Expanded - show content
+                expandIcon.textContent = '▲';
+                if (checkContent) {
+                    checkContent.style.maxHeight = '5000px';
+                    checkContent.style.overflow = 'visible';
+                    checkContent.style.padding = '0 30px 30px 30px';
+                }
+            }
+        }
+
+        // Initialize page
+        window.addEventListener('load', function() {
+            // Animate score circle
+            var circle = document.querySelector('.score-circle-progress');
+            if (circle) {
+                setTimeout(function() {
+                    circle.style.strokeDashoffset = circle.getAttribute('stroke-dashoffset');
+                }, 200);
+            }
+
+            // Initialize all items as visible and expanded
+            var allItems = document.querySelectorAll('.check-item');
+            console.log('Initializing', allItems.length, 'check items');
+
+            for (var i = 0; i < allItems.length; i++) {
+                var item = allItems[i];
+                var checkContent = item.querySelector('.check-content');
+                var expandIcon = item.querySelector('.expand-icon');
+
+                // Remove any hidden/collapsed classes
+                item.classList.remove('hidden');
+                item.classList.remove('collapsed');
+
+                // Ensure item is visible
+                item.style.display = 'block';
+                item.style.visibility = 'visible';
+
+                // Ensure content is visible and expanded
+                if (checkContent) {
+                    checkContent.style.display = 'block';
+                    checkContent.style.maxHeight = 'none';
+                    checkContent.style.overflow = 'visible';
+                    checkContent.style.padding = '0 30px 30px 30px';
+                }
+
+                // Set icon to expanded
+                if (expandIcon) {
+                    expandIcon.textContent = '▲';
+                }
+            }
+
+            console.log('Initialization complete - all items visible and expanded');
+        });
+    </script>
+</body>
+</html>
