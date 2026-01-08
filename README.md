@@ -333,7 +333,9 @@ Once all issues are resolved:
 ## Reviewers & Contributors
 
 **Reviewed by:** Vijay Karumajji, Prin WW SSA MySQL & Abhimanyu Tomar, Sr.STAM-DB (NAMER)
+
 **Contributors:** Jigar Mandli, ESL TAM
+
 ---
 
 ## Support
