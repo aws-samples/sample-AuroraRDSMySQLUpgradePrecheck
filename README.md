@@ -2,17 +2,17 @@
 
 A comprehensive, enterprise-grade tool for assessing MySQL 5.7 database readiness for upgrading to MySQL 8.0. This tool works with both Amazon Aurora MySQL and Amazon RDS MySQL instances.
 
-## 🎯 What Does This Tool Do?
+## What Does This Tool Do?
 
 This tool performs **20+ automated compatibility checks** on your MySQL 5.7 databases to identify potential issues before upgrading to MySQL 8.0. It generates a professional, enterprise-grade HTML report with:
 
-- ✅ **Executive Dashboard** with readiness scores
-- ✅ **Risk Assessment Matrix** for prioritizing fixes
-- ✅ **Detailed Findings** for each compatibility check
-- ✅ **AWS Blue/Green Deployment** guidance and resources
-- ✅ **Actionable Recommendations** with step-by-step remediation
+- **Executive Dashboard** with readiness scores
+- **Risk Assessment Matrix** for prioritizing fixes
+- **Detailed Findings** for each compatibility check
+- **AWS Blue/Green Deployment** guidance and resources
+- **Actionable Recommendations** with step-by-step remediation
 
-## 📋 Prerequisites
+## Prerequisites
 
 ### AWS Requirements
 - AWS Account with RDS MySQL 5.7 or Aurora MySQL 5.7 instances
@@ -31,7 +31,7 @@ This tool performs **20+ automated compatibility checks** on your MySQL 5.7 data
 - Database credentials stored in AWS Secrets Manager
 - Network connectivity from your machine to the database
 
-## 🚀 Quick Start
+## Quick Start
 
 ### Step 1: Clone the Repository
 
@@ -85,7 +85,7 @@ python run_assessment.py --cluster your-cluster-name --region us-east-2
 open reports/upgrade_assessment.html
 ```
 
-## 📖 Detailed Usage
+## Detailed Usage
 
 ### Command-Line Options
 
@@ -117,7 +117,7 @@ python run_assessment.py --cluster my-rds-instance --region eu-west-1 --profile 
 python run_assessment.py --cluster my-cluster --region us-east-1 --verbose
 ```
 
-## 📊 Understanding the Report
+## Understanding the Report
 
 ### Executive Dashboard
 - **Readiness Score**: 0-100% indicating upgrade readiness
@@ -142,7 +142,7 @@ Each check includes:
 - Step-by-step deployment process
 - AWS documentation links
 
-## 🔍 Compatibility Checks Performed
+## Compatibility Checks Performed
 
 The tool performs 20+ checks including:
 
@@ -167,7 +167,7 @@ The tool performs 20+ checks including:
 19. **Binary Logging** - Replication settings
 20. **Collations** - Collation compatibility
 
-## 🛠️ Configuration
+## Configuration
 
 ### AWS Secrets Manager Setup
 
@@ -199,7 +199,7 @@ report:
   format: html
 ```
 
-## 🔒 Security & Credentials
+## Security & Credentials
 
 ### How Credentials Are Handled
 
@@ -233,7 +233,7 @@ report:
 }
 ```
 
-## 📁 Output Files
+## Output Files
 
 After running the assessment, you'll find:
 
@@ -248,7 +248,7 @@ reports/
 - **JSON Report**: Use for automation/parsing
 - **Executive Summary**: Quick overview in markdown format
 
-## ❓ Troubleshooting
+## Troubleshooting
 
 ### Common Issues
 
@@ -285,27 +285,27 @@ Solution:
 
 See `docs/TROUBLESHOOTING.md` for more solutions.
 
-## 🎓 Best Practices
+## Best Practices
 
 ### Before Running the Tool
-1. ✅ Take a snapshot of your database
-2. ✅ Run during low-traffic period
-3. ✅ Review database size (large databases take longer)
-4. ✅ Ensure stable network connection
+1.  Take a snapshot of your database
+2.  Run during low-traffic period
+3.  Review database size (large databases take longer)
+4.  Ensure stable network connection
 
 ### After Getting Results
-1. 📋 Address all Critical (Red) issues first
-2. 📋 Plan for Warning (Amber) issues
-3. 📋 Test fixes in development environment
-4. 📋 Re-run assessment after fixes
-5. 📋 Use AWS Blue/Green deployment for upgrade
+1.  Address all Critical (Red) issues first
+2.  Plan for Warning (Amber) issues
+3.  Test fixes in development environment
+4.  Re-run assessment after fixes
+5.  Use AWS Blue/Green deployment for upgrade
 
 ### Upgrade Readiness Scores
 - **80-100%**: Ready for upgrade
 - **60-79%**: Address warnings, then proceed
 - **Below 60%**: Fix critical issues before considering upgrade
 
-## 📚 Additional Documentation
+## Additional Documentation
 
 - [`DEPLOYMENT_GUIDE.md`](DEPLOYMENT_GUIDE.md) - Detailed deployment instructions
 - [`USER_GUIDE.md`](USER_GUIDE.md) - Comprehensive user guide
@@ -313,7 +313,7 @@ See `docs/TROUBLESHOOTING.md` for more solutions.
 - [`docs/AWS_SETUP.md`](docs/AWS_SETUP.md) - AWS prerequisites and setup
 - [`docs/TROUBLESHOOTING.md`](docs/TROUBLESHOOTING.md) - Common issues and solutions
 
-## 🔄 Upgrade Path
+## Upgrade Path
 
 Once all issues are resolved:
 
@@ -324,19 +324,19 @@ Once all issues are resolved:
 5. **Monitor**: Watch metrics during and after upgrade
 6. **Rollback Plan**: Keep blue environment for quick revert
 
-## 👤 Authors
+## Authors
 
 **Authored by:** Kiran mayee Mulupuru, Sr. Database Specialist TAM
 - **Email:** kiranmam@amazon.com
 - **Role:** Senior Database Specialist, Technical Account Manager
 
-## 👤 Reviewers
+## Reviewers & Contributors
 
 **Reviewed by:** Vijay Karumajji, Prin WW SSA MySQL & Abhimanyu Tomar, Sr.STAM-DB (NAMER)
-
+**Contributors:** Jigar Mandli, ESL TAM
 ---
 
-## 🆘 Support
+## Support
 
 For issues or questions:
 - 📖 Check documentation in `docs/` directory
@@ -344,7 +344,7 @@ For issues or questions:
 - 💬 Contact your AWS support team
 - 📧 Tool author: kiranmam@amazon.com
 
-## 📝 License
+## License
 
 Copyright © 2025. All rights reserved.
 
