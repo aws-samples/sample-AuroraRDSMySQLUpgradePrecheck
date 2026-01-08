@@ -1,0 +1,108 @@
+# Aurora Upgrade Checker Configuration Example
+# Copy this file to config.yaml and customize for your environment
+
+# AWS Configuration
+aws:
+  # AWS region where your databases are located
+  region: us-east-1
+
+  # AWS CLI profile name (optional)
+  # If not specified, uses default credentials
+  profile: default
+
+  # VPC endpoints (optional - for private VPC environments)
+  # endpoints:
+  #   rds: https://rds.us-east-1.amazonaws.com
+  #   secretsmanager: https://secretsmanager.us-east-1.amazonaws.com
+
+# Authentication Configuration
+authentication:
+  # Authentication method: iam, secrets_manager, or config
+  method: secrets_manager
+
+  # Secrets Manager Configuration (if method = secrets_manager)
+  secrets:
+    # Map cluster/instance identifiers to secret names or ARNs
+    my-cluster-1: arn:aws:secretsmanager:us-east-1:123456789012:secret:db/cluster1-abc123
+    my-cluster-2: db/cluster2/credentials
+
+  # IAM Authentication Configuration (if method = iam)
+  iam:
+    # Database username for IAM authentication
+    username: iam_db_user
+
+  # Direct Configuration (if method = config)
+  # WARNING: Storing passwords in config files is not recommended for production
+  databases:
+    - identifier: my-cluster-1
+      endpoint: my-cluster-1.cluster-abc123.us-east-1.rds.amazonaws.com
+      port: 3306
+      user: admin
+      password: 'MySecurePassword123!'
+
+    - identifier: my-rds-instance
+      endpoint: my-rds-instance.abc123.us-east-1.rds.amazonaws.com
+      port: 3306
+      user: admin
+      password: 'AnotherPassword456!'
+
+# Assessment Options
+assessment:
+  # Run checks in parallel (faster but uses more connections)
+  parallel_checks: false
+
+  # Maximum number of parallel workers
+  max_workers: 5
+
+  # Timeout settings (in seconds)
+  timeouts:
+    # Default timeout for all checks
+    default: 300
+
+    # Per-check timeouts (override default)
+    schema_info: 600
+    deprecated_features: 300
+    triggers_views: 400
+
+  # Include read replicas in assessment (default: false)
+  include_replicas: false
+
+  # Specific clusters to assess (optional - if not specified, discovers all 5.7.x clusters)
+  # clusters:
+  #   - my-cluster-1
+  #   - my-cluster-2
+
+  # Filter clusters by tags (optional)
+  # tags:
+  #   Environment: Production
+  #   Team: Database
+
+# Report Options
+report:
+  # Output directory for generated reports
+  output_dir: reports
+
+  # Report formats to generate: html, json, markdown
+  formats:
+    - html
+    - json
+
+  # Include detailed findings in reports
+  include_details: true
+
+  # Report title customization
+  title: MySQL 5.7 to 8.0 Upgrade Assessment
+
+  # Company/organization name (optional - appears in report header)
+  # organization: My Company Name
+
+# Logging Configuration
+logging:
+  # Log level: DEBUG, INFO, WARNING, ERROR
+  level: INFO
+
+  # Log file location (optional - if not specified, logs to console only)
+  file: logs/auc.log
+
+  # Log format
+  format: '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
