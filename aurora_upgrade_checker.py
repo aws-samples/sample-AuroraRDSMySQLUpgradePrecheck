@@ -31,10 +31,14 @@ class AuroraUpgradeChecker:
             self._check_replication_topology,
             self._check_connection_configuration
         ]
+        self.db_info = None  # Store db_info for checks to access
 
     def run_checks(self, db_info, credentials):
         conn = None
         try:
+            # Store db_info for access by individual checks
+            self.db_info = db_info
+
             conn = self._get_connection(db_info, credentials)
             results = {
                 'cluster_id': db_info['identifier'],
@@ -224,21 +228,32 @@ class AuroraUpgradeChecker:
         cursor = None
         try:
             cursor = conn.cursor(dictionary=True)
-            
+
+            # Get server-level character set configuration
+            cursor.execute("""
+                SELECT
+                    @@character_set_server as character_set_server,
+                    @@collation_server as collation_server,
+                    @@character_set_database as character_set_database,
+                    @@collation_database as collation_database
+            """)
+            server_config = cursor.fetchone()
+
             # Get schema character sets
             cursor.execute("""
-                SELECT 
+                SELECT
                     schema_name,
                     default_character_set_name,
                     default_collation_name
                 FROM information_schema.schemata
                 WHERE schema_name NOT IN ('information_schema', 'performance_schema', 'mysql', 'sys')
             """)
-            schema_charsets = cursor.fetchall() or []  # Add or [] here
+            schema_charsets = cursor.fetchall() or []
 
             # Get detailed character set information for tables and columns
+            # IMPORTANT: Only include columns that actually have character sets (exclude numeric types)
             cursor.execute("""
-                SELECT 
+                SELECT
                     t.table_schema,
                     t.table_name,
                     t.table_collation,
@@ -248,78 +263,128 @@ class AuroraUpgradeChecker:
                     c.column_type,
                     c.data_type
                 FROM information_schema.tables t
-                JOIN information_schema.columns c 
-                    ON t.table_schema = c.table_schema 
+                JOIN information_schema.columns c
+                    ON t.table_schema = c.table_schema
                     AND t.table_name = c.table_name
-                WHERE (c.character_set_name = 'utf8'
-                    OR t.table_collation LIKE 'utf8%'
-                    OR c.character_set_name = 'latin1'
-                    OR t.table_collation LIKE 'latin1%')
+                WHERE c.character_set_name IS NOT NULL
+                AND c.data_type IN ('char', 'varchar', 'text', 'tinytext', 'mediumtext', 'longtext', 'enum', 'set')
                 AND t.table_schema NOT IN ('information_schema', 'performance_schema', 'mysql', 'sys')
-                AND t.table_type = 'BASE TABLE'  # Add this line
+                AND t.table_type = 'BASE TABLE'
                 ORDER BY t.table_schema, t.table_name, c.column_name
             """)
-            charset_details = cursor.fetchall() or []  # Add or [] here
+            all_charset_columns = cursor.fetchall() or []
 
             result = {
                 'name': 'Character Set Check',
-                'description': 'Identifies legacy character sets (latin1, utf8) that should be migrated to utf8mb4 for full Unicode support',
+                'description': 'Reviews character set configuration and identifies compatibility considerations for MySQL 8.0',
                 'status': 'GREEN',
                 'issues': [],
                 'recommendations': [],
                 'details': {
+                    'server_config': server_config,
                     'schema_charsets': schema_charsets,
-                    'charset_issues': charset_details,
+                    'utf8mb3_columns': [],
+                    'latin1_columns': [],
+                    'other_charset_columns': [],
                     'summary': {
-                        'total_issues': len(charset_details),
-                        'affected_schemas': len(set(row.get('table_schema', '') for row in charset_details if row)),  # Modified
-                        'affected_tables': len(set(f"{row.get('table_schema', '')}.{row.get('table_name', '')}"  # Modified
-                                                 for row in charset_details if row))
+                        'total_columns_reviewed': len(all_charset_columns),
+                        'utf8mb3_count': 0,
+                        'latin1_count': 0,
+                        'utf8mb4_count': 0,
+                        'other_count': 0
                     }
                 }
             }
 
-            if charset_details:
+            # Categorize columns by charset
+            utf8mb3_columns = []
+            latin1_columns = []
+            other_charset_columns = []
+
+            for col in all_charset_columns:
+                charset = col.get('character_set_name', '')
+
+                if charset in ['utf8', 'utf8mb3']:
+                    utf8mb3_columns.append(col)
+                    result['details']['summary']['utf8mb3_count'] += 1
+                elif charset == 'latin1':
+                    latin1_columns.append(col)
+                    result['details']['summary']['latin1_count'] += 1
+                elif charset == 'utf8mb4':
+                    result['details']['summary']['utf8mb4_count'] += 1
+                else:
+                    other_charset_columns.append(col)
+                    result['details']['summary']['other_count'] += 1
+
+            result['details']['utf8mb3_columns'] = utf8mb3_columns
+            result['details']['latin1_columns'] = latin1_columns
+            result['details']['other_charset_columns'] = other_charset_columns
+
+            # Check for utf8/utf8mb3 usage (AMBER - not blocking)
+            if utf8mb3_columns:
                 result['status'] = 'AMBER'
-                # Group issues by schema for better organization
-                by_schema = {}
-                for issue in charset_details:
-                    if not issue:  # Add this check
-                        continue
-                    schema = issue.get('table_schema')  # Changed from direct access to .get()
-                    if not schema:  # Add this check
-                        continue
-                    if schema not in by_schema:
-                        by_schema[schema] = []
-                    by_schema[schema].append(issue)
-
-                # Add detailed issues
-                for schema, issues in by_schema.items():
-                    result['issues'].append(f"\nSchema: {schema}")
-                    for issue in issues:
-                        try:  # Add try-except block
-                            result['issues'].append(
-                                f"  Table: {issue.get('table_name', 'UNKNOWN')}\n"  # Changed to .get()
-                                f"    Column: {issue.get('column_name', 'UNKNOWN')}\n"  # Changed to .get()
-                                f"    Type: {issue.get('column_type', 'UNKNOWN')}\n"  # Changed to .get()
-                                f"    Current Charset: {issue.get('character_set_name', 'UNKNOWN')}\n"  # Changed to .get()
-                                f"    Current Collation: {issue.get('collation_name', 'UNKNOWN')}"  # Changed to .get()
-                            )
-                        except Exception as e:
-                            continue  # Skip problematic entries
-
+                result['issues'].append(
+                    f"Found {len(utf8mb3_columns)} columns using utf8/utf8mb3 character set"
+                )
                 result['recommendations'].extend([
-                    f"Total columns to convert: {len(charset_details)}",
-                    f"Affected schemas: {result['details']['summary']['affected_schemas']}",
-                    f"Affected tables: {result['details']['summary']['affected_tables']}",
-                    "Convert legacy character sets to utf8mb4",
-                    "Example commands:",
-                    "  ALTER DATABASE <schema> CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;",
-                    "  ALTER TABLE <table> CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;",
-                    "Update application connection strings to use utf8mb4",
-                    "Consider taking backup before charset conversion",
-                    "Test application handling of 4-byte UTF-8 characters"
+                    "",
+                    "UTF8/UTF8MB3 Considerations:",
+                    "- utf8mb3 is not removed in MySQL 8.0 and remains usable through MySQL 8.4",
+                    "- MySQL 8.0 changes the default charset to utf8mb4, but existing utf8mb3 data is unaffected",
+                    "- Client library upgrades may be required (older clients don't recognize utf8mb3 keyword)",
+                    "- You may continue using utf8mb3 if you accept the 3-byte UTF-8 limitation",
+                    "",
+                    "IMPORTANT: If converting to utf8mb4:",
+                    "- Perform charset conversion BEFORE or AFTER the MySQL upgrade, never during",
+                    "- Test thoroughly before conversion",
+                    "- Conversion command example:",
+                    "  ALTER TABLE <table> CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;"
                 ])
+
+            # Check for latin1 usage (Informational only - not a blocker)
+            if latin1_columns:
+                if result['status'] == 'GREEN':
+                    result['status'] = 'AMBER'
+                result['issues'].append(
+                    f"Found {len(latin1_columns)} columns using latin1 character set (informational)"
+                )
+                result['recommendations'].extend([
+                    "",
+                    "LATIN1 Considerations:",
+                    "- latin1 is fully supported in MySQL 8.0 and there are no plans to deprecate it",
+                    "- If latin1 usage is intentional for your application, no action is required",
+                    "- MySQL 8.0 changes the default server charset to utf8mb4, but this only affects NEW objects",
+                    "- Existing latin1 schemas and tables are unaffected and continue to work",
+                    "",
+                    "Optional: If you want to standardize on utf8mb4:",
+                    "- Perform conversion BEFORE or AFTER upgrade, never during",
+                    "- Only convert if your application requirements warrant it"
+                ])
+
+            # Note about default charset changes
+            if server_config:
+                server_charset = server_config.get('character_set_server', '')
+                if server_charset in ['latin1', 'utf8', 'utf8mb3']:
+                    if result['status'] == 'GREEN':
+                        result['status'] = 'AMBER'
+                    result['issues'].append(
+                        f"Server default character set is '{server_charset}' (MySQL 8.0 defaults to utf8mb4)"
+                    )
+                    result['recommendations'].extend([
+                        "",
+                        "Default Character Set Note:",
+                        "- MySQL 8.0 changes default character_set_server to utf8mb4",
+                        "- This only affects NEW objects created without explicit charset specification",
+                        "- Existing schemas, tables, and columns are NOT affected",
+                        "- No pre-upgrade action is required",
+                        "- Post-upgrade: Set character_set_server explicitly in parameter group if needed"
+                    ])
+
+            # If everything is utf8mb4, give positive feedback
+            if result['status'] == 'GREEN':
+                result['recommendations'].append(
+                    "Character set configuration is optimal for MySQL 8.0 (utf8mb4 in use)"
+                )
 
             return result
         except Exception as e:
@@ -361,15 +426,30 @@ class AuroraUpgradeChecker:
 
             # Check critical settings
             if settings['binlog_format'] != 'ROW':
-                result['status'] = 'RED'
+                # ROW format is strongly recommended for MySQL 8.0 but not absolutely required
+                # It becomes critical if using certain features (replication, certain storage engines)
+                if result['status'] == 'GREEN':
+                    result['status'] = 'AMBER'
                 result['issues'].append(
-                    f"binlog_format is {settings['binlog_format']}, must be ROW for 8.0 upgrade"
+                    f"binlog_format is '{settings['binlog_format']}' - ROW format is strongly recommended for MySQL 8.0"
                 )
                 result['details']['required_changes'].append({
                     'parameter': 'binlog_format',
                     'current': settings['binlog_format'],
-                    'required': 'ROW'
+                    'required': 'ROW',
+                    'reason': 'Required for safe replication and certain MySQL 8.0 features'
                 })
+                result['recommendations'].extend([
+                    "",
+                    "binlog_format Clarification:",
+                    "- ROW format is required if using:",
+                    "  * Replication with row-based triggers",
+                    "  * NDB Cluster",
+                    "  * Group Replication",
+                    "  * Certain MySQL 8.0 features",
+                    "- If not using these features, STATEMENT or MIXED may be acceptable",
+                    "- ROW format is generally recommended for data consistency and safety"
+                ])
 
             if settings['gtid_mode'] != 'ON':
                 result['status'] = 'AMBER'
@@ -408,10 +488,10 @@ class AuroraUpgradeChecker:
                 result['recommendations'].extend([
                     "Update parameter group with the following changes:",
                     "Required changes:",
-                    *[f"  - Set {change['parameter']} = {change['required']}" 
+                    *[f"  - Set {change['parameter']} = {change.get('required') or change.get('recommended')}"
                       for change in result['details']['required_changes']],
                     "Optional changes for better durability:",
-                    *[f"  - Consider setting {change['parameter']} = {change['recommended']}" 
+                    *[f"  - Consider setting {change['parameter']} = {change['recommended']}"
                       for change in result['details']['optional_changes']],
                     "Review replication topology before making changes",
                     "Test application performance with new settings",
@@ -483,18 +563,38 @@ class AuroraUpgradeChecker:
 
             # 1. Authentication Methods Check
             try:
+                # Check for truly deprecated plugins (RED)
                 cursor.execute("""
                     SELECT user, host, plugin, authentication_string
-                    FROM mysql.user 
-                    WHERE plugin IN ('mysql_old_password', 'mysql_native_password')
+                    FROM mysql.user
+                    WHERE plugin IN ('mysql_old_password')
                 """)
-                old_auth_users = cursor.fetchall()
-                if old_auth_users:
+                truly_deprecated_auth = cursor.fetchall()
+                if truly_deprecated_auth:
                     result['details']['authentication']['status'] = 'RED'
-                    result['details']['authentication']['affected_users'] = old_auth_users
-                    result['issues'].append(f"Found {len(old_auth_users)} users with deprecated authentication methods")
+                    result['details']['authentication']['affected_users'] = truly_deprecated_auth
+                    result['issues'].append(
+                        f"Found {len(truly_deprecated_auth)} users with mysql_old_password (removed in MySQL 8.0)"
+                    )
                     result['status'] = 'RED'
                     result['details']['summary']['critical_issues'] += 1
+
+                # Check for mysql_native_password (informational only - AMBER)
+                cursor.execute("""
+                    SELECT user, host, plugin, authentication_string
+                    FROM mysql.user
+                    WHERE plugin IN ('mysql_native_password')
+                    AND user NOT IN ('mysql.sys', 'mysql.session', 'mysql.infoschema', 'rdsadmin')
+                """)
+                native_password_users = cursor.fetchall()
+                if native_password_users:
+                    if result['status'] == 'GREEN':
+                        result['status'] = 'AMBER'
+                    result['details']['authentication']['native_password_users'] = native_password_users
+                    result['issues'].append(
+                        f"Found {len(native_password_users)} users with mysql_native_password (informational)"
+                    )
+                    result['details']['summary']['warnings'] += 1
             except Exception as e:
                 result['issues'].append(f"Could not check authentication methods: {str(e)}")
 
@@ -677,10 +777,24 @@ class AuroraUpgradeChecker:
 
             # Generate recommendations based on findings
             if result['details']['summary']['total_issues'] > 0:
-                if result['details']['authentication']['affected_users']:
-                    result['recommendations'].append(
-                        "Update authentication to caching_sha2_password for all users"
-                    )
+                # Recommendations for mysql_old_password (critical)
+                if result['details']['authentication'].get('affected_users'):
+                    result['recommendations'].extend([
+                        "CRITICAL: mysql_old_password is removed in MySQL 8.0",
+                        "Pre-upgrade action required: Migrate these users to mysql_native_password or caching_sha2_password"
+                    ])
+
+                # Recommendations for mysql_native_password (informational)
+                if result['details']['authentication'].get('native_password_users'):
+                    result['recommendations'].extend([
+                        "",
+                        "Note: mysql_native_password authentication plugin:",
+                        "- Remains supported in MySQL 8.0",
+                        "- No pre-upgrade action required",
+                        "- POST-UPGRADE: Consider migrating to caching_sha2_password for enhanced security",
+                        "- caching_sha2_password is the default in MySQL 8.0 but migration is optional",
+                        "- Client library compatibility should be verified before migration"
+                    ])
                 if result['details']['functions_and_syntax']['affected_objects']:
                     result['recommendations'].append(
                         "Remove or replace deprecated function usage in stored procedures and functions"
@@ -725,6 +839,10 @@ class AuroraUpgradeChecker:
     def _check_parameters(self, conn):
         cursor = None
         try:
+            # Check if this is Aurora
+            is_aurora = (self.db_info and
+                        self.db_info.get('engine', '').startswith('aurora'))
+
             result = {
                 'name': 'Parameter Compatibility Check',
                 'description': 'Identifies removed or changed system variables that require configuration updates before upgrading',
@@ -732,6 +850,7 @@ class AuroraUpgradeChecker:
                 'issues': [],
                 'recommendations': [],
                 'details': {
+                    'is_aurora': is_aurora,
                     'critical_parameters': [],
                     'behavioral_changes': [],
                     'removed_parameters': [],
@@ -765,34 +884,71 @@ class AuroraUpgradeChecker:
                 ('max_tmp_tables', 'Removed - No longer used')
             ]
 
-            # removed_params is an internal whitelist — validate before formatting into SQL
-            allowed_params = {p for p, _ in removed_params}
-            for param, note in removed_params:
-                if param not in allowed_params:
-                    logger.warning("Skipping unapproved parameter check: %s", param)
-                    continue
-                sql = f"SELECT @@{param} as value"
-                try:
-                    cursor.execute(sql)
-                    row = cursor.fetchone()
-                except Exception as e:
-                    logger.exception("Error checking parameter %s: %s", param, e)
-                    continue
-                if row:
-                    # support dict or tuple formats
-                    if hasattr(row, 'get'):
-                        val = row.get('value') or row.get('VALUE') or row.get('Value')
-                    else:
-                        val = row[0] if len(row) > 0 else None
-                    if val is not None:
-                        result['details']['removed_parameters'].append({
-                            'parameter': param,
-                            'note': note,
-                            'action_required': 'Remove from configuration'
-                        })
-                        result['issues'].append(f"Parameter will be removed in 8.0: {param}")
-                        result['status'] = 'RED'
-                        result['details']['summary']['critical_issues'] += 1
+            # For Aurora, parameter compatibility is managed automatically
+            if is_aurora:
+                result['recommendations'].append(
+                    "Aurora automatically manages parameter group compatibility during upgrades - "
+                    "you will be required to use a MySQL 8.0-compatible parameter group"
+                )
+                # Still check for informational purposes but don't flag as critical
+                # removed_params is an internal whitelist — validate before formatting into SQL
+                allowed_params = {p for p, _ in removed_params}
+                found_removed = []
+                for param, note in removed_params:
+                    if param not in allowed_params:
+                        logger.warning("Skipping unapproved parameter check: %s", param)
+                        continue
+                    sql = f"SELECT @@{param} as value"
+                    try:
+                        cursor.execute(sql)
+                        row = cursor.fetchone()
+                    except Exception as e:
+                        logger.exception("Error checking parameter %s: %s", param, e)
+                        continue
+                    if row:
+                        # support dict or tuple formats
+                        if hasattr(row, 'get'):
+                            val = row.get('value') or row.get('VALUE') or row.get('Value')
+                        else:
+                            val = row[0] if len(row) > 0 else None
+                        if val is not None:
+                            found_removed.append(param)
+
+                if found_removed:
+                    result['recommendations'].append(
+                        f"Note: Detected {len(found_removed)} parameters that will be removed in 8.0, "
+                        "but Aurora will handle this automatically during upgrade"
+                    )
+            else:
+                # For RDS MySQL (non-Aurora), removed parameters are critical
+                # removed_params is an internal whitelist — validate before formatting into SQL
+                allowed_params = {p for p, _ in removed_params}
+                for param, note in removed_params:
+                    if param not in allowed_params:
+                        logger.warning("Skipping unapproved parameter check: %s", param)
+                        continue
+                    sql = f"SELECT @@{param} as value"
+                    try:
+                        cursor.execute(sql)
+                        row = cursor.fetchone()
+                    except Exception as e:
+                        logger.exception("Error checking parameter %s: %s", param, e)
+                        continue
+                    if row:
+                        # support dict or tuple formats
+                        if hasattr(row, 'get'):
+                            val = row.get('value') or row.get('VALUE') or row.get('Value')
+                        else:
+                            val = row[0] if len(row) > 0 else None
+                        if val is not None:
+                            result['details']['removed_parameters'].append({
+                                'parameter': param,
+                                'note': note,
+                                'action_required': 'Remove from configuration'
+                            })
+                            result['issues'].append(f"Parameter will be removed in 8.0: {param}")
+                            result['status'] = 'RED'
+                            result['details']['summary']['critical_issues'] += 1
 
             # 2. Check Default Value Changes
             default_changes = [
@@ -857,7 +1013,11 @@ class AuroraUpgradeChecker:
                             result['status'] = 'AMBER'
                         result['details']['summary']['warnings'] += 1
                 except Exception as e:
-                    logger.exception("Error checking default change for %s: %s", param.get('param'), e)
+                    # Skip variables that don't exist in MySQL 5.7 (like binlog_expire_logs_seconds)
+                    if 'Unknown system variable' in str(e):
+                        logger.debug("Skipping %s check (not available in this MySQL version)", param.get('param'))
+                    else:
+                        logger.exception("Error checking default change for %s: %s", param.get('param'), e)
                     continue
 
             # 3. Check Behavioral Changes
@@ -2476,6 +2636,7 @@ class AuroraUpgradeChecker:
             }
 
             # Get auto-increment information
+            # Note: Check for UNSIGNED/SIGNED to use correct max values
             cursor.execute("""
                 SELECT
                     t.table_schema,
@@ -2483,12 +2644,20 @@ class AuroraUpgradeChecker:
                     t.auto_increment,
                     c.column_name,
                     c.data_type,
-                    CASE c.data_type
-                        WHEN 'tinyint' THEN 255
-                        WHEN 'smallint' THEN 65535
-                        WHEN 'mediumint' THEN 16777215
-                        WHEN 'int' THEN 4294967295
-                        WHEN 'bigint' THEN 18446744073709551615
+                    c.column_type,
+                    CASE
+                        -- UNSIGNED values
+                        WHEN c.column_type LIKE '%unsigned%' AND c.data_type = 'tinyint' THEN 255
+                        WHEN c.column_type LIKE '%unsigned%' AND c.data_type = 'smallint' THEN 65535
+                        WHEN c.column_type LIKE '%unsigned%' AND c.data_type = 'mediumint' THEN 16777215
+                        WHEN c.column_type LIKE '%unsigned%' AND c.data_type = 'int' THEN 4294967295
+                        WHEN c.column_type LIKE '%unsigned%' AND c.data_type = 'bigint' THEN 18446744073709551615
+                        -- SIGNED values (default if unsigned not specified)
+                        WHEN c.data_type = 'tinyint' THEN 127
+                        WHEN c.data_type = 'smallint' THEN 32767
+                        WHEN c.data_type = 'mediumint' THEN 8388607
+                        WHEN c.data_type = 'int' THEN 2147483647
+                        WHEN c.data_type = 'bigint' THEN 9223372036854775807
                     END as max_value
                 FROM information_schema.tables t
                 JOIN information_schema.columns c
@@ -2515,7 +2684,7 @@ class AuroraUpgradeChecker:
                         'schema': table['table_schema'],
                         'table': table['table_name'],
                         'column': table['column_name'],
-                        'data_type': table['data_type'],
+                        'column_type': table['column_type'],
                         'current': table['auto_increment'],
                         'max': table['max_value'],
                         'percent_used': round(percent_used, 2)
@@ -2527,7 +2696,10 @@ class AuroraUpgradeChecker:
                         result['details']['summary']['critical_count'] += 1
                         result['details']['high_usage_tables'].append(table_info)
                         result['issues'].append(
-                            f"CRITICAL: Table '{table['table_schema']}.{table['table_name']}' auto-increment at {round(percent_used, 1)}% capacity ({table['auto_increment']:,} of {table['max_value']:,})"
+                            f"CRITICAL: Table '{table['table_schema']}.{table['table_name']}' "
+                            f"column '{table['column_name']}' ({table['column_type']}) "
+                            f"at {round(percent_used, 1)}% capacity "
+                            f"({table['auto_increment']:,} of {table['max_value']:,})"
                         )
 
                     # Warning: >70% capacity
@@ -2537,7 +2709,10 @@ class AuroraUpgradeChecker:
                         result['details']['summary']['warning_count'] += 1
                         result['details']['high_usage_tables'].append(table_info)
                         result['issues'].append(
-                            f"WARNING: Table '{table['table_schema']}.{table['table_name']}' auto-increment at {round(percent_used, 1)}% capacity ({table['auto_increment']:,} of {table['max_value']:,})"
+                            f"WARNING: Table '{table['table_schema']}.{table['table_name']}' "
+                            f"column '{table['column_name']}' ({table['column_type']}) "
+                            f"at {round(percent_used, 1)}% capacity "
+                            f"({table['auto_increment']:,} of {table['max_value']:,})"
                         )
 
             # Generate recommendations

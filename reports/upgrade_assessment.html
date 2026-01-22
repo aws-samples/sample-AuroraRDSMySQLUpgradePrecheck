@@ -907,10 +907,7 @@
         <!-- Header -->
         <div class="header">
             <div class="header-content">
-                <div class="customer-banner">
-                    <div class="customer-label">Prepared for</div>
-                    <div class="customer-name">ABC Corp</div>
-                </div>
+                
                 <h1>
                     <span class="header-icon">🗄️</span>
                     MySQL Upgrade Assessment Report
@@ -918,15 +915,15 @@
                 <div class="header-meta">
                     <div class="meta-item">
                         <span>📊</span>
-                        <span><strong>Cluster:</strong> database-3</span>
+                        <span><strong>Cluster:</strong> ams-5740212</span>
                     </div>
                     <div class="meta-item">
                         <span>🔢</span>
-                        <span><strong>Version:</strong> 5.7.mysql_aurora.2.12.3</span>
+                        <span><strong>Version:</strong> 5.7.mysql_aurora.2.12.0</span>
                     </div>
                     <div class="meta-item">
                         <span>📅</span>
-                        <span><strong>Generated:</strong> 2025-12-12 23:08:57</span>
+                        <span><strong>Generated:</strong> 2026-01-21 21:57:15</span>
                     </div>
                 </div>
             </div>
@@ -945,7 +942,7 @@
 
                 <div class="metric-card status-red clickable" onclick="scrollToFindings();filterChecks('red');">
                     <div class="metric-label">Critical Issues</div>
-                    <div class="metric-value">38</div>
+                    <div class="metric-value">41</div>
                     <div class="metric-description">Click to view critical issues</div>
                 </div>
 
@@ -957,7 +954,7 @@
 
                 <div class="metric-card status-green clickable" onclick="scrollToFindings();filterChecks('green');">
                     <div class="metric-label">Passed Checks</div>
-                    <div class="metric-value">9</div>
+                    <div class="metric-value">31</div>
                     <div class="metric-description">Click to view passed checks</div>
                 </div>
             </div>
@@ -969,12 +966,12 @@
                     <svg class="score-svg" width="200" height="200">
                         <circle class="score-circle-bg" cx="100" cy="100" r="80"></circle>
                         <circle class="score-circle-progress" cx="100" cy="100" r="80"
-                                stroke="#e74c3c"
+                                stroke="#f39c12"
                                 stroke-dasharray="502.4"
-                                stroke-dashoffset="276.31999999999994">
+                                stroke-dashoffset="115.55200000000002">
                         </circle>
                     </svg>
-                    <div class="score-text">45%</div>
+                    <div class="score-text">77%</div>
                 </div>
                 <div class="status-badge red">RED</div>
                 <p class="score-label">Overall System Readiness</p>
@@ -1236,15 +1233,15 @@
                 </button>
                 <button class="filter-btn" onclick="filterChecks('red')">
                     <span>🔴 Critical</span>
-                    <span class="filter-count">5</span>
+                    <span class="filter-count">4</span>
                 </button>
                 <button class="filter-btn" onclick="filterChecks('amber')">
                     <span>🟡 Warnings</span>
-                    <span class="filter-count">6</span>
+                    <span class="filter-count">5</span>
                 </button>
                 <button class="filter-btn" onclick="filterChecks('green')">
                     <span>🟢 Passed</span>
-                    <span class="filter-count">9</span>
+                    <span class="filter-count">31</span>
                 </button>
             </div>
 
@@ -1284,7 +1281,7 @@
         <div class="issues-section">
             <div class="issues-title">⚠️ Issues Detected</div>
             <ul class="issues-list">
-                <li>Current version 5.7.44 needs upgrade to 8.0</li>
+                <li>Current version 5.7.40 needs upgrade to 8.0</li>
                 <li>Server character set: latin1</li>
                 <li>Server collation: latin1_swedish_ci</li>
             </ul>
@@ -1306,7 +1303,7 @@
         </div>
         <div class="check-title">
             <div class="check-name">Character Set Check</div>
-            <div class="check-description">Identifies legacy character sets (latin1, utf8) that should be migrated to utf8mb4 for full Unicode support</div>
+            <div class="check-description">Reviews character set configuration and identifies compatibility considerations for MySQL 8.0</div>
         </div>
         <div class="check-badge amber">AMBER</div>
         <div class="expand-icon">▼</div>
@@ -1315,805 +1312,19 @@
         <div class="issues-section">
             <div class="issues-title">⚠️ Issues Detected</div>
             <ul class="issues-list">
-                <li>
-Schema: upgrade_test</li>
-                <li>  Table: audit_log
-    Column: action
-    Type: varchar(10)
-    Current Charset: latin1
-    Current Collation: latin1_swedish_ci</li>
-                <li>  Table: audit_log
-    Column: changed_at
-    Type: timestamp
-    Current Charset: None
-    Current Collation: None</li>
-                <li>  Table: audit_log
-    Column: id
-    Type: int(11)
-    Current Charset: None
-    Current Collation: None</li>
-                <li>  Table: audit_log
-    Column: new_value
-    Type: text
-    Current Charset: latin1
-    Current Collation: latin1_swedish_ci</li>
-                <li>  Table: audit_log
-    Column: old_value
-    Type: text
-    Current Charset: latin1
-    Current Collation: latin1_swedish_ci</li>
-                <li>  Table: audit_log
-    Column: table_name
-    Type: varchar(50)
-    Current Charset: latin1
-    Current Collation: latin1_swedish_ci</li>
-                <li>  Table: child_table
-    Column: id
-    Type: int(11)
-    Current Charset: None
-    Current Collation: None</li>
-                <li>  Table: child_table
-    Column: info
-    Type: varchar(100)
-    Current Charset: latin1
-    Current Collation: latin1_swedish_ci</li>
-                <li>  Table: child_table
-    Column: parent_id
-    Type: int(11)
-    Current Charset: None
-    Current Collation: None</li>
-                <li>  Table: customer_data
-    Column: created_at
-    Type: datetime
-    Current Charset: None
-    Current Collation: None</li>
-                <li>  Table: customer_data
-    Column: email
-    Type: varchar(255)
-    Current Charset: latin1
-    Current Collation: latin1_swedish_ci</li>
-                <li>  Table: customer_data
-    Column: full_name
-    Type: varchar(200)
-    Current Charset: latin1
-    Current Collation: latin1_swedish_ci</li>
-                <li>  Table: customer_data
-    Column: id
-    Type: int(11)
-    Current Charset: None
-    Current Collation: None</li>
-                <li>  Table: customer_data
-    Column: metadata
-    Type: json
-    Current Charset: None
-    Current Collation: None</li>
-                <li>  Table: heavily_partitioned
-    Column: created_date
-    Type: date
-    Current Charset: None
-    Current Collation: None</li>
-                <li>  Table: heavily_partitioned
-    Column: data
-    Type: varchar(100)
-    Current Charset: latin1
-    Current Collation: latin1_swedish_ci</li>
-                <li>  Table: heavily_partitioned
-    Column: id
-    Type: int(11)
-    Current Charset: None
-    Current Collation: None</li>
-                <li>  Table: inventory
-    Column: id
-    Type: int(11)
-    Current Charset: None
-    Current Collation: None</li>
-                <li>  Table: inventory
-    Column: product_code
-    Type: varchar(50)
-    Current Charset: latin1
-    Current Collation: latin1_swedish_ci</li>
-                <li>  Table: inventory
-    Column: quantity
-    Type: int(11)
-    Current Charset: None
-    Current Collation: None</li>
-                <li>  Table: inventory
-    Column: status
-    Type: varchar(20)
-    Current Charset: latin1
-    Current Collation: latin1_swedish_ci</li>
-                <li>  Table: inventory
-    Column: warehouse_id
-    Type: int(11)
-    Current Charset: None
-    Current Collation: None</li>
-                <li>  Table: large_data_table
-    Column: created_at
-    Type: timestamp
-    Current Charset: None
-    Current Collation: None</li>
-                <li>  Table: large_data_table
-    Column: data1
-    Type: varchar(255)
-    Current Charset: latin1
-    Current Collation: latin1_swedish_ci</li>
-                <li>  Table: large_data_table
-    Column: data2
-    Type: text
-    Current Charset: latin1
-    Current Collation: latin1_swedish_ci</li>
-                <li>  Table: large_data_table
-    Column: data3
-    Type: blob
-    Current Charset: None
-    Current Collation: None</li>
-                <li>  Table: large_data_table
-    Column: data4
-    Type: varchar(255)
-    Current Charset: latin1
-    Current Collation: latin1_swedish_ci</li>
-                <li>  Table: large_data_table
-    Column: data5
-    Type: text
-    Current Charset: latin1
-    Current Collation: latin1_swedish_ci</li>
-                <li>  Table: large_data_table
-    Column: id
-    Type: int(11)
-    Current Charset: None
-    Current Collation: None</li>
-                <li>  Table: latin1_table
-    Column: id
-    Type: int(11)
-    Current Charset: None
-    Current Collation: None</li>
-                <li>  Table: latin1_table
-    Column: name
-    Type: varchar(100)
-    Current Charset: latin1
-    Current Collation: latin1_swedish_ci</li>
-                <li>  Table: locations
-    Column: area
-    Type: polygon
-    Current Charset: None
-    Current Collation: None</li>
-                <li>  Table: locations
-    Column: coordinates
-    Type: point
-    Current Charset: None
-    Current Collation: None</li>
-                <li>  Table: locations
-    Column: id
-    Type: int(11)
-    Current Charset: None
-    Current Collation: None</li>
-                <li>  Table: locations
-    Column: name
-    Type: varchar(100)
-    Current Charset: latin1
-    Current Collation: latin1_swedish_ci</li>
-                <li>  Table: old_utf8_table
-    Column: description
-    Type: text
-    Current Charset: utf8
-    Current Collation: utf8_general_ci</li>
-                <li>  Table: old_utf8_table
-    Column: id
-    Type: int(11)
-    Current Charset: None
-    Current Collation: None</li>
-                <li>  Table: orders_smallint
-    Column: customer_id
-    Type: int(11)
-    Current Charset: None
-    Current Collation: None</li>
-                <li>  Table: orders_smallint
-    Column: order_date
-    Type: date
-    Current Charset: None
-    Current Collation: None</li>
-                <li>  Table: orders_smallint
-    Column: order_id
-    Type: smallint(5) unsigned
-    Current Charset: None
-    Current Collation: None</li>
-                <li>  Table: orders_smallint
-    Column: total
-    Type: decimal(10,2)
-    Current Charset: None
-    Current Collation: None</li>
-                <li>  Table: orders_tinyint
-    Column: item_code
-    Type: varchar(20)
-    Current Charset: latin1
-    Current Collation: latin1_swedish_ci</li>
-                <li>  Table: orders_tinyint
-    Column: order_id
-    Type: tinyint(3) unsigned
-    Current Charset: None
-    Current Collation: None</li>
-                <li>  Table: orders_tinyint
-    Column: quantity
-    Type: int(11)
-    Current Charset: None
-    Current Collation: None</li>
-                <li>  Table: parent_table
-    Column: data
-    Type: varchar(100)
-    Current Charset: latin1
-    Current Collation: latin1_swedish_ci</li>
-                <li>  Table: parent_table
-    Column: id
-    Type: int(11)
-    Current Charset: None
-    Current Collation: None</li>
-                <li>  Table: products
-    Column: attributes
-    Type: json
-    Current Charset: None
-    Current Collation: None</li>
-                <li>  Table: products
-    Column: id
-    Type: int(11)
-    Current Charset: None
-    Current Collation: None</li>
-                <li>  Table: products
-    Column: name
-    Type: varchar(100)
-    Current Charset: latin1
-    Current Collation: latin1_swedish_ci</li>
-                <li>  Table: products
-    Column: tags
-    Type: json
-    Current Charset: None
-    Current Collation: None</li>
-                <li>  Table: rank
-    Column: id
-    Type: int(11)
-    Current Charset: None
-    Current Collation: None</li>
-                <li>  Table: rank
-    Column: score
-    Type: int(11)
-    Current Charset: None
-    Current Collation: None</li>
-                <li>  Table: sales_data
-    Column: groups
-    Type: varchar(100)
-    Current Charset: latin1
-    Current Collation: latin1_swedish_ci</li>
-                <li>  Table: sales_data
-    Column: id
-    Type: int(11)
-    Current Charset: None
-    Current Collation: None</li>
-                <li>  Table: sales_data
-    Column: lag
-    Type: int(11)
-    Current Charset: None
-    Current Collation: None</li>
-                <li>  Table: sales_data
-    Column: lead
-    Type: decimal(10,2)
-    Current Charset: None
-    Current Collation: None</li>
-                <li>  Table: sales_data
-    Column: over
-    Type: varchar(50)
-    Current Charset: latin1
-    Current Collation: latin1_swedish_ci</li>
-                <li>  Table: system
-    Column: id
-    Type: int(11)
-    Current Charset: None
-    Current Collation: None</li>
-                <li>  Table: system
-    Column: name
-    Type: varchar(50)
-    Current Charset: latin1
-    Current Collation: latin1_swedish_ci</li>
-                <li>  Table: user_passwords
-    Column: id
-    Type: int(11)
-    Current Charset: None
-    Current Collation: None</li>
-                <li>  Table: user_passwords
-    Column: password_hash
-    Type: varchar(100)
-    Current Charset: latin1
-    Current Collation: latin1_swedish_ci</li>
-                <li>  Table: user_passwords
-    Column: username
-    Type: varchar(50)
-    Current Charset: latin1
-    Current Collation: latin1_swedish_ci</li>
-                <li>  Table: window
-    Column: id
-    Type: int(11)
-    Current Charset: None
-    Current Collation: None</li>
-                <li>  Table: window
-    Column: title
-    Type: varchar(100)
-    Current Charset: latin1
-    Current Collation: latin1_swedish_ci</li>
-                <li>
-Schema: upgrade_test_good</li>
-                <li>  Table: audit_trail
-    Column: action_type
-    Type: varchar(20)
-    Current Charset: utf8mb4
-    Current Collation: utf8mb4_general_ci</li>
-                <li>  Table: audit_trail
-    Column: audit_id
-    Type: int(11)
-    Current Charset: None
-    Current Collation: None</li>
-                <li>  Table: audit_trail
-    Column: changed_at
-    Type: timestamp
-    Current Charset: None
-    Current Collation: None</li>
-                <li>  Table: audit_trail
-    Column: changed_by
-    Type: varchar(100)
-    Current Charset: utf8mb4
-    Current Collation: utf8mb4_general_ci</li>
-                <li>  Table: audit_trail
-    Column: record_id
-    Type: int(11)
-    Current Charset: None
-    Current Collation: None</li>
-                <li>  Table: audit_trail
-    Column: table_name
-    Type: varchar(50)
-    Current Charset: utf8mb4
-    Current Collation: utf8mb4_general_ci</li>
-                <li>  Table: customers
-    Column: created_at
-    Type: timestamp
-    Current Charset: None
-    Current Collation: None</li>
-                <li>  Table: customers
-    Column: email
-    Type: varchar(255)
-    Current Charset: utf8mb4
-    Current Collation: utf8mb4_unicode_ci</li>
-                <li>  Table: customers
-    Column: first_name
-    Type: varchar(100)
-    Current Charset: utf8mb4
-    Current Collation: utf8mb4_unicode_ci</li>
-                <li>  Table: customers
-    Column: id
-    Type: int(11)
-    Current Charset: None
-    Current Collation: None</li>
-                <li>  Table: customers
-    Column: last_name
-    Type: varchar(100)
-    Current Charset: utf8mb4
-    Current Collation: utf8mb4_unicode_ci</li>
-                <li>  Table: customer_addresses
-    Column: address_id
-    Type: int(11)
-    Current Charset: None
-    Current Collation: None</li>
-                <li>  Table: customer_addresses
-    Column: address_type
-    Type: enum('billing','shipping','both')
-    Current Charset: utf8mb4
-    Current Collation: utf8mb4_general_ci</li>
-                <li>  Table: customer_addresses
-    Column: city
-    Type: varchar(100)
-    Current Charset: utf8mb4
-    Current Collation: utf8mb4_general_ci</li>
-                <li>  Table: customer_addresses
-    Column: country
-    Type: varchar(100)
-    Current Charset: utf8mb4
-    Current Collation: utf8mb4_general_ci</li>
-                <li>  Table: customer_addresses
-    Column: customer_id
-    Type: int(11)
-    Current Charset: None
-    Current Collation: None</li>
-                <li>  Table: customer_addresses
-    Column: is_default
-    Type: tinyint(1)
-    Current Charset: None
-    Current Collation: None</li>
-                <li>  Table: customer_addresses
-    Column: postal_code
-    Type: varchar(20)
-    Current Charset: utf8mb4
-    Current Collation: utf8mb4_general_ci</li>
-                <li>  Table: customer_addresses
-    Column: state_province
-    Type: varchar(100)
-    Current Charset: utf8mb4
-    Current Collation: utf8mb4_general_ci</li>
-                <li>  Table: customer_addresses
-    Column: street_address
-    Type: varchar(255)
-    Current Charset: utf8mb4
-    Current Collation: utf8mb4_general_ci</li>
-                <li>  Table: customer_preferences
-    Column: customer_id
-    Type: int(11)
-    Current Charset: None
-    Current Collation: None</li>
-                <li>  Table: customer_preferences
-    Column: notification_settings
-    Type: json
-    Current Charset: None
-    Current Collation: None</li>
-                <li>  Table: customer_preferences
-    Column: preferences
-    Type: json
-    Current Charset: None
-    Current Collation: None</li>
-                <li>  Table: customer_preferences
-    Column: preference_id
-    Type: int(11)
-    Current Charset: None
-    Current Collation: None</li>
-                <li>  Table: customer_preferences
-    Column: updated_at
-    Type: timestamp
-    Current Charset: None
-    Current Collation: None</li>
-                <li>  Table: event_logs
-    Column: created_at
-    Type: timestamp
-    Current Charset: None
-    Current Collation: None</li>
-                <li>  Table: event_logs
-    Column: event_data
-    Type: json
-    Current Charset: None
-    Current Collation: None</li>
-                <li>  Table: event_logs
-    Column: event_type
-    Type: varchar(50)
-    Current Charset: latin1
-    Current Collation: latin1_swedish_ci</li>
-                <li>  Table: event_logs
-    Column: log_id
-    Type: bigint(20) unsigned
-    Current Charset: None
-    Current Collation: None</li>
-                <li>  Table: orders
-    Column: customer_id
-    Type: int(11)
-    Current Charset: None
-    Current Collation: None</li>
-                <li>  Table: orders
-    Column: order_date
-    Type: date
-    Current Charset: None
-    Current Collation: None</li>
-                <li>  Table: orders
-    Column: order_id
-    Type: int(11)
-    Current Charset: None
-    Current Collation: None</li>
-                <li>  Table: orders
-    Column: status
-    Type: enum('pending','processing','shipped','delivered','cancelled')
-    Current Charset: utf8mb4
-    Current Collation: utf8mb4_unicode_ci</li>
-                <li>  Table: orders
-    Column: total_amount
-    Type: decimal(10,2)
-    Current Charset: None
-    Current Collation: None</li>
-                <li>  Table: order_items
-    Column: item_id
-    Type: int(11)
-    Current Charset: None
-    Current Collation: None</li>
-                <li>  Table: order_items
-    Column: order_id
-    Type: int(11)
-    Current Charset: None
-    Current Collation: None</li>
-                <li>  Table: order_items
-    Column: product_id
-    Type: int(11)
-    Current Charset: None
-    Current Collation: None</li>
-                <li>  Table: order_items
-    Column: quantity
-    Type: int(11)
-    Current Charset: None
-    Current Collation: None</li>
-                <li>  Table: order_items
-    Column: unit_price
-    Type: decimal(10,2)
-    Current Charset: None
-    Current Collation: None</li>
-                <li>  Table: products
-    Column: category
-    Type: varchar(50)
-    Current Charset: utf8mb4
-    Current Collation: utf8mb4_unicode_ci</li>
-                <li>  Table: products
-    Column: description
-    Type: text
-    Current Charset: utf8mb4
-    Current Collation: utf8mb4_unicode_ci</li>
-                <li>  Table: products
-    Column: price
-    Type: decimal(10,2)
-    Current Charset: None
-    Current Collation: None</li>
-                <li>  Table: products
-    Column: product_id
-    Type: int(11)
-    Current Charset: None
-    Current Collation: None</li>
-                <li>  Table: products
-    Column: product_name
-    Type: varchar(200)
-    Current Charset: utf8mb4
-    Current Collation: utf8mb4_unicode_ci</li>
-                <li>  Table: products
-    Column: stock_quantity
-    Type: int(11)
-    Current Charset: None
-    Current Collation: None</li>
-                <li>  Table: products
-    Column: updated_at
-    Type: timestamp
-    Current Charset: None
-    Current Collation: None</li>
-                <li>  Table: product_categories
-    Column: category_id
-    Type: int(11)
-    Current Charset: None
-    Current Collation: None</li>
-                <li>  Table: product_categories
-    Column: category_name
-    Type: varchar(100)
-    Current Charset: utf8mb4
-    Current Collation: utf8mb4_general_ci</li>
-                <li>  Table: product_categories
-    Column: description
-    Type: text
-    Current Charset: utf8mb4
-    Current Collation: utf8mb4_general_ci</li>
-                <li>  Table: product_categories
-    Column: display_order
-    Type: int(11)
-    Current Charset: None
-    Current Collation: None</li>
-                <li>  Table: product_categories
-    Column: parent_category_id
-    Type: int(11)
-    Current Charset: None
-    Current Collation: None</li>
-                <li>  Table: product_images
-    Column: display_order
-    Type: int(11)
-    Current Charset: None
-    Current Collation: None</li>
-                <li>  Table: product_images
-    Column: image_alt_text
-    Type: varchar(200)
-    Current Charset: utf8mb4
-    Current Collation: utf8mb4_general_ci</li>
-                <li>  Table: product_images
-    Column: image_id
-    Type: int(11)
-    Current Charset: None
-    Current Collation: None</li>
-                <li>  Table: product_images
-    Column: image_url
-    Type: varchar(500)
-    Current Charset: utf8mb4
-    Current Collation: utf8mb4_general_ci</li>
-                <li>  Table: product_images
-    Column: is_primary
-    Type: tinyint(1)
-    Current Charset: None
-    Current Collation: None</li>
-                <li>  Table: product_images
-    Column: product_id
-    Type: int(11)
-    Current Charset: None
-    Current Collation: None</li>
-                <li>  Table: product_reviews
-    Column: customer_id
-    Type: int(11)
-    Current Charset: None
-    Current Collation: None</li>
-                <li>  Table: product_reviews
-    Column: helpful_count
-    Type: int(11)
-    Current Charset: None
-    Current Collation: None</li>
-                <li>  Table: product_reviews
-    Column: product_id
-    Type: int(11)
-    Current Charset: None
-    Current Collation: None</li>
-                <li>  Table: product_reviews
-    Column: rating
-    Type: tinyint(4)
-    Current Charset: None
-    Current Collation: None</li>
-                <li>  Table: product_reviews
-    Column: review_date
-    Type: datetime
-    Current Charset: None
-    Current Collation: None</li>
-                <li>  Table: product_reviews
-    Column: review_id
-    Type: int(11)
-    Current Charset: None
-    Current Collation: None</li>
-                <li>  Table: product_reviews
-    Column: review_text
-    Type: text
-    Current Charset: utf8mb4
-    Current Collation: utf8mb4_general_ci</li>
-                <li>  Table: sales_history
-    Column: amount
-    Type: decimal(10,2)
-    Current Charset: None
-    Current Collation: None</li>
-                <li>  Table: sales_history
-    Column: customer_id
-    Type: int(11)
-    Current Charset: None
-    Current Collation: None</li>
-                <li>  Table: sales_history
-    Column: sale_date
-    Type: date
-    Current Charset: None
-    Current Collation: None</li>
-                <li>  Table: sales_history
-    Column: sale_id
-    Type: int(11)
-    Current Charset: None
-    Current Collation: None</li>
-                <li>  Table: sales_transactions
-    Column: order_id
-    Type: int(11)
-    Current Charset: None
-    Current Collation: None</li>
-                <li>  Table: sales_transactions
-    Column: payment_amount
-    Type: decimal(10,2)
-    Current Charset: None
-    Current Collation: None</li>
-                <li>  Table: sales_transactions
-    Column: payment_method
-    Type: varchar(50)
-    Current Charset: utf8mb4
-    Current Collation: utf8mb4_general_ci</li>
-                <li>  Table: sales_transactions
-    Column: transaction_date
-    Type: datetime
-    Current Charset: None
-    Current Collation: None</li>
-                <li>  Table: sales_transactions
-    Column: transaction_id
-    Type: bigint(20)
-    Current Charset: None
-    Current Collation: None</li>
-                <li>  Table: sales_transactions
-    Column: transaction_status
-    Type: varchar(20)
-    Current Charset: utf8mb4
-    Current Collation: utf8mb4_general_ci</li>
-                <li>  Table: session_data
-    Column: created_at
-    Type: timestamp
-    Current Charset: None
-    Current Collation: None</li>
-                <li>  Table: session_data
-    Column: expires_at
-    Type: timestamp
-    Current Charset: None
-    Current Collation: None</li>
-                <li>  Table: session_data
-    Column: ip_address
-    Type: varchar(45)
-    Current Charset: latin1
-    Current Collation: latin1_swedish_ci</li>
-                <li>  Table: session_data
-    Column: session_id
-    Type: int(10) unsigned
-    Current Charset: None
-    Current Collation: None</li>
-                <li>  Table: session_data
-    Column: session_token
-    Type: varchar(255)
-    Current Charset: latin1
-    Current Collation: latin1_swedish_ci</li>
-                <li>  Table: session_data
-    Column: user_agent
-    Type: text
-    Current Charset: latin1
-    Current Collation: latin1_swedish_ci</li>
-                <li>  Table: session_data
-    Column: user_id
-    Type: int(11)
-    Current Charset: None
-    Current Collation: None</li>
-                <li>  Table: shipping_carriers
-    Column: carrier_code
-    Type: varchar(20)
-    Current Charset: utf8mb4
-    Current Collation: utf8mb4_general_ci</li>
-                <li>  Table: shipping_carriers
-    Column: carrier_id
-    Type: int(11)
-    Current Charset: None
-    Current Collation: None</li>
-                <li>  Table: shipping_carriers
-    Column: carrier_name
-    Type: varchar(100)
-    Current Charset: utf8mb4
-    Current Collation: utf8mb4_general_ci</li>
-                <li>  Table: shipping_carriers
-    Column: is_active
-    Type: tinyint(1)
-    Current Charset: None
-    Current Collation: None</li>
-                <li>  Table: shipping_carriers
-    Column: tracking_url_template
-    Type: varchar(500)
-    Current Charset: utf8mb4
-    Current Collation: utf8mb4_general_ci</li>
-                <li>  Table: user_accounts
-    Column: account_id
-    Type: int(11)
-    Current Charset: None
-    Current Collation: None</li>
-                <li>  Table: user_accounts
-    Column: account_status
-    Type: varchar(20)
-    Current Charset: utf8mb4
-    Current Collation: utf8mb4_general_ci</li>
-                <li>  Table: user_accounts
-    Column: last_login
-    Type: datetime
-    Current Charset: None
-    Current Collation: None</li>
-                <li>  Table: user_accounts
-    Column: registration_date
-    Type: datetime
-    Current Charset: None
-    Current Collation: None</li>
-                <li>  Table: user_accounts
-    Column: username
-    Type: varchar(50)
-    Current Charset: utf8mb4
-    Current Collation: utf8mb4_general_ci</li>
-                <li>  Table: user_accounts
-    Column: user_email
-    Type: varchar(255)
-    Current Charset: utf8mb4
-    Current Collation: utf8mb4_general_ci</li>
+                <li>Server default character set is 'latin1' (MySQL 8.0 defaults to utf8mb4)</li>
             </ul>
         </div>
         <div class="recommendations-section">
             <div class="recommendations-title">💡 Recommendations</div>
             <ul class="recommendations-list">
-                <li>Total columns to convert: 156</li>
-                <li>Affected schemas: 2</li>
-                <li>Affected tables: 34</li>
-                <li>Convert legacy character sets to utf8mb4</li>
-                <li>Example commands:</li>
-                <li>  ALTER DATABASE &lt;schema&gt; CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;</li>
-                <li>  ALTER TABLE &lt;table&gt; CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;</li>
-                <li>Update application connection strings to use utf8mb4</li>
-                <li>Consider taking backup before charset conversion</li>
-                <li>Test application handling of 4-byte UTF-8 characters</li>
+                <li></li>
+                <li>Default Character Set Note:</li>
+                <li>- MySQL 8.0 changes default character_set_server to utf8mb4</li>
+                <li>- This only affects NEW objects created without explicit charset specification</li>
+                <li>- Existing schemas, tables, and columns are NOT affected</li>
+                <li>- No pre-upgrade action is required</li>
+                <li>- Post-upgrade: Set character_set_server explicitly in parameter group if needed</li>
             </ul>
         </div>
     </div>
@@ -2164,7 +1375,7 @@ Schema: upgrade_test_good</li>
         <div class="issues-section">
             <div class="issues-title">⚠️ Issues Detected</div>
             <ul class="issues-list">
-                <li>Found 4 users with deprecated authentication methods</li>
+                <li>Found 1 users with mysql_native_password (informational)</li>
                 <li>Deprecated system variable in use: query_cache_size</li>
                 <li>Deprecated system variable in use: query_cache_type</li>
                 <li>Deprecated system variable in use: innodb_file_format</li>
@@ -2175,16 +1386,572 @@ Schema: upgrade_test_good</li>
                 <li>Deprecated system variable in use: secure_auth</li>
                 <li>Deprecated system variable in use: multi_range_count</li>
                 <li>Query cache is enabled but will be removed in 8.0</li>
-                <li>Found 2 spatial columns - review SRID requirements</li>
             </ul>
         </div>
         <div class="recommendations-section">
             <div class="recommendations-title">💡 Recommendations</div>
             <ul class="recommendations-list">
-                <li>Update authentication to caching_sha2_password for all users</li>
+                <li></li>
+                <li>Note: mysql_native_password authentication plugin:</li>
+                <li>- Remains supported in MySQL 8.0</li>
+                <li>- No pre-upgrade action required</li>
+                <li>- POST-UPGRADE: Consider migrating to caching_sha2_password for enhanced security</li>
+                <li>- caching_sha2_password is the default in MySQL 8.0 but migration is optional</li>
+                <li>- Client library compatibility should be verified before migration</li>
                 <li>Disable query cache and remove related settings</li>
                 <li>Update system variables to use new names and remove deprecated ones</li>
-                <li>Add SRID to spatial columns and rebuild spatial indexes</li>
+            </ul>
+        </div>
+    </div>
+</div>
+<div class="check-item red">
+    <div class="check-header" onclick="toggleCheck(this)">
+        <div class="check-icon red">
+            🔴
+        </div>
+        <div class="check-title">
+            <div class="check-name">Parameter Compatibility Check</div>
+            <div class="check-description">Identifies removed or changed system variables that require configuration updates before upgrading</div>
+        </div>
+        <div class="check-badge red">RED</div>
+        <div class="expand-icon">▼</div>
+    </div>
+    <div class="check-content">
+        <div class="issues-section">
+            <div class="issues-title">⚠️ Issues Detected</div>
+            <ul class="issues-list">
+                <li>Parameter innodb_autoinc_lock_mode default changing to 2</li>
+                <li>Critical parameter log_bin_trust_function_creators not set to required value 1</li>
+            </ul>
+        </div>
+        <div class="recommendations-section">
+            <div class="recommendations-title">💡 Recommendations</div>
+            <ul class="recommendations-list">
+                <li>Aurora automatically manages parameter group compatibility during upgrades - you will be required to use a MySQL 8.0-compatible parameter group</li>
+                <li>Note: Detected 12 parameters that will be removed in 8.0, but Aurora will handle this automatically during upgrade</li>
+                <li>Review and test with new parameter default values</li>
+                <li>Update critical parameters to required values</li>
+            </ul>
+        </div>
+    </div>
+</div>
+<div class="check-item green">
+    <div class="check-header" onclick="toggleCheck(this)">
+        <div class="check-icon green">
+            🟢
+        </div>
+        <div class="check-title">
+            <div class="check-name">Foreign Key Check</div>
+            <div class="check-description">Analyzes foreign key constraints for potential compatibility issues and validates referential integrity</div>
+        </div>
+        <div class="check-badge green">GREEN</div>
+        <div class="expand-icon">▼</div>
+    </div>
+    <div class="check-content">
+        <div class="success-message">
+            <span>✓</span>
+            <span>No issues found - this check passed successfully</span>
+        </div>
+    </div>
+</div>
+<div class="check-item green">
+    <div class="check-header" onclick="toggleCheck(this)">
+        <div class="check-icon green">
+            🟢
+        </div>
+        <div class="check-title">
+            <div class="check-name">Triggers and Views Check</div>
+            <div class="check-description">Examines triggers and views for syntax changes, deprecated features, and complexity issues</div>
+        </div>
+        <div class="check-badge green">GREEN</div>
+        <div class="expand-icon">▼</div>
+    </div>
+    <div class="check-content">
+        <div class="success-message">
+            <span>✓</span>
+            <span>No issues found - this check passed successfully</span>
+        </div>
+    </div>
+</div>
+<div class="check-item green">
+    <div class="check-header" onclick="toggleCheck(this)">
+        <div class="check-icon green">
+            🟢
+        </div>
+        <div class="check-title">
+            <div class="check-name">New Features Compatibility</div>
+            <div class="check-description">Highlights MySQL 8.0 features (CTEs, window functions, JSON) available after upgrade</div>
+        </div>
+        <div class="check-badge green">GREEN</div>
+        <div class="expand-icon">▼</div>
+    </div>
+    <div class="check-content">
+        <div class="success-message">
+            <span>✓</span>
+            <span>No issues found - this check passed successfully</span>
+        </div>
+        <div class="recommendations-section">
+            <div class="recommendations-title">💡 Recommendations</div>
+            <ul class="recommendations-list">
+                <li>
+New Feature Opportunities in 8.0:</li>
+                <li>1. Hash Joins for better join performance</li>
+                <li>2. Invisible Indexes for safe index management</li>
+                <li>3. Descending Indexes for mixed-order queries</li>
+                <li>4. Window Functions for analytical queries</li>
+                <li>5. Instant DDL for faster schema changes</li>
+                <li>6. SQL Roles for better security management</li>
+                <li>7. Check Constraints for data integrity</li>
+                <li>
+Performance Improvements:</li>
+                <li>- Enhanced optimizer features</li>
+                <li>- Improved deadlock detection</li>
+                <li>- Better temporary table handling</li>
+                <li>- Instant DDL operations</li>
+                <li>
+Security Enhancements:</li>
+                <li>- New authentication plugin (caching_sha2_password)</li>
+                <li>- Role-based access control</li>
+                <li>- Enhanced password management</li>
+            </ul>
+        </div>
+    </div>
+</div>
+<div class="check-item green">
+    <div class="check-header" onclick="toggleCheck(this)">
+        <div class="check-icon green">
+            🟢
+        </div>
+        <div class="check-title">
+            <div class="check-name">Reserved Keywords Conflicts</div>
+            <div class="check-description">Identifies table and column names that conflict with new MySQL 8.0 reserved keywords</div>
+        </div>
+        <div class="check-badge green">GREEN</div>
+        <div class="expand-icon">▼</div>
+    </div>
+    <div class="check-content">
+        <div class="success-message">
+            <span>✓</span>
+            <span>No issues found - this check passed successfully</span>
+        </div>
+    </div>
+</div>
+<div class="check-item green">
+    <div class="check-header" onclick="toggleCheck(this)">
+        <div class="check-icon green">
+            🟢
+        </div>
+        <div class="check-title">
+            <div class="check-name">Partition Compatibility</div>
+            <div class="check-description">Validates partitioned tables for compatibility with MySQL 8.0 partitioning changes</div>
+        </div>
+        <div class="check-badge green">GREEN</div>
+        <div class="expand-icon">▼</div>
+    </div>
+    <div class="check-content">
+        <div class="success-message">
+            <span>✓</span>
+            <span>No issues found - this check passed successfully</span>
+        </div>
+        <div class="recommendations-section">
+            <div class="recommendations-title">💡 Recommendations</div>
+            <ul class="recommendations-list">
+                <li>No partitioned tables found</li>
+            </ul>
+        </div>
+    </div>
+</div>
+<div class="check-item green">
+    <div class="check-header" onclick="toggleCheck(this)">
+        <div class="check-icon green">
+            🟢
+        </div>
+        <div class="check-title">
+            <div class="check-name">User Privileges and Security</div>
+            <div class="check-description">Reviews user accounts, authentication plugins, and privilege mappings for MySQL 8.0 security model</div>
+        </div>
+        <div class="check-badge green">GREEN</div>
+        <div class="expand-icon">▼</div>
+    </div>
+    <div class="check-content">
+        <div class="success-message">
+            <span>✓</span>
+            <span>No issues found - this check passed successfully</span>
+        </div>
+        <div class="recommendations-section">
+            <div class="recommendations-title">💡 Recommendations</div>
+            <ul class="recommendations-list">
+                <li>User authentication and privileges are compatible with MySQL 8.0</li>
+            </ul>
+        </div>
+    </div>
+</div>
+<div class="check-item green">
+    <div class="check-header" onclick="toggleCheck(this)">
+        <div class="check-icon green">
+            🟢
+        </div>
+        <div class="check-title">
+            <div class="check-name">JSON Usage and Optimization</div>
+            <div class="check-description">Analyzes JSON column usage and recommends MySQL 8.0 JSON optimization opportunities</div>
+        </div>
+        <div class="check-badge green">GREEN</div>
+        <div class="expand-icon">▼</div>
+    </div>
+    <div class="check-content">
+        <div class="success-message">
+            <span>✓</span>
+            <span>No issues found - this check passed successfully</span>
+        </div>
+        <div class="recommendations-section">
+            <div class="recommendations-title">💡 Recommendations</div>
+            <ul class="recommendations-list">
+                <li>No JSON columns found in database</li>
+            </ul>
+        </div>
+    </div>
+</div>
+<div class="check-item green">
+    <div class="check-header" onclick="toggleCheck(this)">
+        <div class="check-icon green">
+            🟢
+        </div>
+        <div class="check-title">
+            <div class="check-name">Stored Routine Complexity</div>
+            <div class="check-description">Evaluates stored procedures and functions for size, complexity, and potential upgrade issues</div>
+        </div>
+        <div class="check-badge green">GREEN</div>
+        <div class="expand-icon">▼</div>
+    </div>
+    <div class="check-content">
+        <div class="success-message">
+            <span>✓</span>
+            <span>No issues found - this check passed successfully</span>
+        </div>
+        <div class="recommendations-section">
+            <div class="recommendations-title">💡 Recommendations</div>
+            <ul class="recommendations-list">
+                <li>No stored routines found</li>
+            </ul>
+        </div>
+    </div>
+</div>
+<div class="check-item green">
+    <div class="check-header" onclick="toggleCheck(this)">
+        <div class="check-icon green">
+            🟢
+        </div>
+        <div class="check-title">
+            <div class="check-name">Spatial Data SRID Requirements</div>
+            <div class="check-description">Identifies spatial columns missing explicit SRID declarations required by MySQL 8.0</div>
+        </div>
+        <div class="check-badge green">GREEN</div>
+        <div class="expand-icon">▼</div>
+    </div>
+    <div class="check-content">
+        <div class="success-message">
+            <span>✓</span>
+            <span>No issues found - this check passed successfully</span>
+        </div>
+        <div class="recommendations-section">
+            <div class="recommendations-title">💡 Recommendations</div>
+            <ul class="recommendations-list">
+                <li>No spatial data columns found</li>
+            </ul>
+        </div>
+    </div>
+</div>
+<div class="check-item green">
+    <div class="check-header" onclick="toggleCheck(this)">
+        <div class="check-icon green">
+            🟢
+        </div>
+        <div class="check-title">
+            <div class="check-name">Functional Index Opportunities</div>
+            <div class="check-description">Suggests MySQL 8.0 functional indexes for expressions commonly used in WHERE clauses</div>
+        </div>
+        <div class="check-badge green">GREEN</div>
+        <div class="expand-icon">▼</div>
+    </div>
+    <div class="check-content">
+        <div class="success-message">
+            <span>✓</span>
+            <span>No issues found - this check passed successfully</span>
+        </div>
+        <div class="recommendations-section">
+            <div class="recommendations-title">💡 Recommendations</div>
+            <ul class="recommendations-list">
+                <li>No obvious functional index opportunities identified</li>
+            </ul>
+        </div>
+    </div>
+</div>
+<div class="check-item green">
+    <div class="check-header" onclick="toggleCheck(this)">
+        <div class="check-icon green">
+            🟢
+        </div>
+        <div class="check-title">
+            <div class="check-name">Index Statistics and Duplication</div>
+            <div class="check-description">Detects duplicate indexes and low-cardinality indexes that impact performance</div>
+        </div>
+        <div class="check-badge green">GREEN</div>
+        <div class="expand-icon">▼</div>
+    </div>
+    <div class="check-content">
+        <div class="success-message">
+            <span>✓</span>
+            <span>No issues found - this check passed successfully</span>
+        </div>
+        <div class="recommendations-section">
+            <div class="recommendations-title">💡 Recommendations</div>
+            <ul class="recommendations-list">
+                <li>No secondary indexes found</li>
+            </ul>
+        </div>
+    </div>
+</div>
+<div class="check-item green">
+    <div class="check-header" onclick="toggleCheck(this)">
+        <div class="check-icon green">
+            🟢
+        </div>
+        <div class="check-title">
+            <div class="check-name">Auto-Increment Exhaustion</div>
+            <div class="check-description">Identifies auto-increment columns approaching their maximum values based on data type limits</div>
+        </div>
+        <div class="check-badge green">GREEN</div>
+        <div class="expand-icon">▼</div>
+    </div>
+    <div class="check-content">
+        <div class="success-message">
+            <span>✓</span>
+            <span>No issues found - this check passed successfully</span>
+        </div>
+        <div class="recommendations-section">
+            <div class="recommendations-title">💡 Recommendations</div>
+            <ul class="recommendations-list">
+                <li>No auto-increment tables found</li>
+            </ul>
+        </div>
+    </div>
+</div>
+<div class="check-item green">
+    <div class="check-header" onclick="toggleCheck(this)">
+        <div class="check-icon green">
+            🟢
+        </div>
+        <div class="check-title">
+            <div class="check-name">Replication Topology</div>
+            <div class="check-description">Analyzes replication configuration, lag, and readiness for upgrade with minimal downtime</div>
+        </div>
+        <div class="check-badge green">GREEN</div>
+        <div class="expand-icon">▼</div>
+    </div>
+    <div class="check-content">
+        <div class="success-message">
+            <span>✓</span>
+            <span>No issues found - this check passed successfully</span>
+        </div>
+        <div class="recommendations-section">
+            <div class="recommendations-title">💡 Recommendations</div>
+            <ul class="recommendations-list">
+                <li>Not configured as a replica - no replication checks needed</li>
+            </ul>
+        </div>
+    </div>
+</div>
+<div class="check-item green">
+    <div class="check-header" onclick="toggleCheck(this)">
+        <div class="check-icon green">
+            🟢
+        </div>
+        <div class="check-title">
+            <div class="check-name">Connection Configuration</div>
+            <div class="check-description">Reviews connection limits, thread cache, and connection-related settings for optimal upgrade performance</div>
+        </div>
+        <div class="check-badge green">GREEN</div>
+        <div class="expand-icon">▼</div>
+    </div>
+    <div class="check-content">
+        <div class="success-message">
+            <span>✓</span>
+            <span>No issues found - this check passed successfully</span>
+        </div>
+        <div class="recommendations-section">
+            <div class="recommendations-title">💡 Recommendations</div>
+            <ul class="recommendations-list">
+                <li>Connection configuration is healthy - 0% utilization</li>
+            </ul>
+        </div>
+    </div>
+</div>
+<div class="check-item green">
+    <div class="check-header" onclick="toggleCheck(this)">
+        <div class="check-icon green">
+            🟢
+        </div>
+        <div class="check-title">
+            <div class="check-name">Schema Information</div>
+            <div class="check-description">Analyzes database schemas, table counts, sizes, and storage engines to assess overall database complexity</div>
+        </div>
+        <div class="check-badge green">GREEN</div>
+        <div class="expand-icon">▼</div>
+    </div>
+    <div class="check-content">
+        <div class="success-message">
+            <span>✓</span>
+            <span>No issues found - this check passed successfully</span>
+        </div>
+    </div>
+</div>
+<div class="check-item amber">
+    <div class="check-header" onclick="toggleCheck(this)">
+        <div class="check-icon amber">
+            🟡
+        </div>
+        <div class="check-title">
+            <div class="check-name">Version Compatibility</div>
+            <div class="check-description">Validates current MySQL 5.7 version and identifies version-specific compatibility issues for MySQL 8.0 upgrade</div>
+        </div>
+        <div class="check-badge amber">AMBER</div>
+        <div class="expand-icon">▼</div>
+    </div>
+    <div class="check-content">
+        <div class="issues-section">
+            <div class="issues-title">⚠️ Issues Detected</div>
+            <ul class="issues-list">
+                <li>Current version 5.7.44-rds.20240408-log needs upgrade to 8.0</li>
+                <li>Server character set: latin1</li>
+                <li>Server collation: latin1_swedish_ci</li>
+            </ul>
+        </div>
+        <div class="recommendations-section">
+            <div class="recommendations-title">💡 Recommendations</div>
+            <ul class="recommendations-list">
+                <li>Plan upgrade to MySQL 8.0</li>
+                <li>Review MySQL 8.0 compatibility requirements</li>
+                <li>Review character set and collation settings for 8.0 compatibility</li>
+            </ul>
+        </div>
+    </div>
+</div>
+<div class="check-item amber">
+    <div class="check-header" onclick="toggleCheck(this)">
+        <div class="check-icon amber">
+            🟡
+        </div>
+        <div class="check-title">
+            <div class="check-name">Character Set Check</div>
+            <div class="check-description">Reviews character set configuration and identifies compatibility considerations for MySQL 8.0</div>
+        </div>
+        <div class="check-badge amber">AMBER</div>
+        <div class="expand-icon">▼</div>
+    </div>
+    <div class="check-content">
+        <div class="issues-section">
+            <div class="issues-title">⚠️ Issues Detected</div>
+            <ul class="issues-list">
+                <li>Server default character set is 'latin1' (MySQL 8.0 defaults to utf8mb4)</li>
+            </ul>
+        </div>
+        <div class="recommendations-section">
+            <div class="recommendations-title">💡 Recommendations</div>
+            <ul class="recommendations-list">
+                <li></li>
+                <li>Default Character Set Note:</li>
+                <li>- MySQL 8.0 changes default character_set_server to utf8mb4</li>
+                <li>- This only affects NEW objects created without explicit charset specification</li>
+                <li>- Existing schemas, tables, and columns are NOT affected</li>
+                <li>- No pre-upgrade action is required</li>
+                <li>- Post-upgrade: Set character_set_server explicitly in parameter group if needed</li>
+            </ul>
+        </div>
+    </div>
+</div>
+<div class="check-item amber">
+    <div class="check-header" onclick="toggleCheck(this)">
+        <div class="check-icon amber">
+            🟡
+        </div>
+        <div class="check-title">
+            <div class="check-name">Binary Log Settings</div>
+            <div class="check-description">Verifies binary logging configuration and format requirements for MySQL 8.0 replication compatibility</div>
+        </div>
+        <div class="check-badge amber">AMBER</div>
+        <div class="expand-icon">▼</div>
+    </div>
+    <div class="check-content">
+        <div class="issues-section">
+            <div class="issues-title">⚠️ Issues Detected</div>
+            <ul class="issues-list">
+                <li>binlog_format is 'MIXED' - ROW format is strongly recommended for MySQL 8.0</li>
+            </ul>
+        </div>
+        <div class="recommendations-section">
+            <div class="recommendations-title">💡 Recommendations</div>
+            <ul class="recommendations-list">
+                <li></li>
+                <li>binlog_format Clarification:</li>
+                <li>- ROW format is required if using:</li>
+                <li>  * Replication with row-based triggers</li>
+                <li>  * NDB Cluster</li>
+                <li>  * Group Replication</li>
+                <li>  * Certain MySQL 8.0 features</li>
+                <li>- If not using these features, STATEMENT or MIXED may be acceptable</li>
+                <li>- ROW format is generally recommended for data consistency and safety</li>
+                <li>Update parameter group with the following changes:</li>
+                <li>Required changes:</li>
+                <li>  - Set binlog_format = ROW</li>
+                <li>Optional changes for better durability:</li>
+                <li>Review replication topology before making changes</li>
+                <li>Test application performance with new settings</li>
+                <li>Plan for potential replication lag during transition</li>
+            </ul>
+        </div>
+    </div>
+</div>
+<div class="check-item red">
+    <div class="check-header" onclick="toggleCheck(this)">
+        <div class="check-icon red">
+            🔴
+        </div>
+        <div class="check-title">
+            <div class="check-name">Deprecated Features Check</div>
+            <div class="check-description">Detects deprecated functions, authentication methods, and SQL modes that are removed in MySQL 8.0</div>
+        </div>
+        <div class="check-badge red">RED</div>
+        <div class="expand-icon">▼</div>
+    </div>
+    <div class="check-content">
+        <div class="issues-section">
+            <div class="issues-title">⚠️ Issues Detected</div>
+            <ul class="issues-list">
+                <li>Found 1 users with mysql_native_password (informational)</li>
+                <li>Deprecated system variable in use: query_cache_size</li>
+                <li>Deprecated system variable in use: query_cache_type</li>
+                <li>Deprecated system variable in use: innodb_file_format</li>
+                <li>Deprecated system variable in use: innodb_file_format_check</li>
+                <li>Deprecated system variable in use: innodb_file_format_max</li>
+                <li>Deprecated system variable in use: tx_isolation</li>
+                <li>Deprecated system variable in use: tx_read_only</li>
+                <li>Deprecated system variable in use: secure_auth</li>
+                <li>Deprecated system variable in use: multi_range_count</li>
+                <li>Query cache is enabled but will be removed in 8.0</li>
+            </ul>
+        </div>
+        <div class="recommendations-section">
+            <div class="recommendations-title">💡 Recommendations</div>
+            <ul class="recommendations-list">
+                <li></li>
+                <li>Note: mysql_native_password authentication plugin:</li>
+                <li>- Remains supported in MySQL 8.0</li>
+                <li>- No pre-upgrade action required</li>
+                <li>- POST-UPGRADE: Consider migrating to caching_sha2_password for enhanced security</li>
+                <li>- caching_sha2_password is the default in MySQL 8.0 but migration is optional</li>
+                <li>- Client library compatibility should be verified before migration</li>
+                <li>Disable query cache and remove related settings</li>
+                <li>Update system variables to use new names and remove deprecated ones</li>
             </ul>
         </div>
     </div>
@@ -2219,6 +1986,7 @@ Schema: upgrade_test_good</li>
                 <li>Parameter will be removed in 8.0: max_tmp_tables</li>
                 <li>Parameter innodb_autoinc_lock_mode default changing to 2</li>
                 <li>Critical parameter log_bin_trust_function_creators not set to required value 1</li>
+                <li>Critical parameter binlog_format not set to required value ROW</li>
             </ul>
         </div>
         <div class="recommendations-section">
@@ -2231,181 +1999,41 @@ Schema: upgrade_test_good</li>
         </div>
     </div>
 </div>
-<div class="check-item amber">
+<div class="check-item green">
     <div class="check-header" onclick="toggleCheck(this)">
-        <div class="check-icon amber">
-            🟡
+        <div class="check-icon green">
+            🟢
         </div>
         <div class="check-title">
             <div class="check-name">Foreign Key Check</div>
             <div class="check-description">Analyzes foreign key constraints for potential compatibility issues and validates referential integrity</div>
         </div>
-        <div class="check-badge amber">AMBER</div>
+        <div class="check-badge green">GREEN</div>
         <div class="expand-icon">▼</div>
     </div>
     <div class="check-content">
-        <div class="issues-section">
-            <div class="issues-title">⚠️ Issues Detected</div>
-            <ul class="issues-list">
-                <li>
-Schema: upgrade_test</li>
-                <li>  FK: child_table_ibfk_1
-    Table: child_table.parent_id
-    References: upgrade_test.parent_table.id
-    Update Rule: RESTRICT, Delete Rule: CASCADE
-    Supporting Index: parent_id</li>
-                <li>
-Schema: upgrade_test_good</li>
-                <li>  FK: customer_addresses_ibfk_1
-    Table: customer_addresses.customer_id
-    References: upgrade_test_good.customers.id
-    Update Rule: CASCADE, Delete Rule: CASCADE
-    Supporting Index: idx_customer</li>
-                <li>  FK: fk_orderitems_orders
-    Table: order_items.order_id
-    References: upgrade_test_good.orders.order_id
-    Update Rule: CASCADE, Delete Rule: RESTRICT
-    Supporting Index: idx_order</li>
-                <li>  FK: fk_orderitems_products
-    Table: order_items.product_id
-    References: upgrade_test_good.products.product_id
-    Update Rule: CASCADE, Delete Rule: RESTRICT
-    Supporting Index: idx_product</li>
-                <li>  FK: product_images_ibfk_1
-    Table: product_images.product_id
-    References: upgrade_test_good.products.product_id
-    Update Rule: CASCADE, Delete Rule: CASCADE
-    Supporting Index: idx_product</li>
-            </ul>
-        </div>
-        <div class="recommendations-section">
-            <div class="recommendations-title">💡 Recommendations</div>
-            <ul class="recommendations-list">
-                <li>
-Foreign Key Statistics:</li>
-                <li>- Total foreign keys: 5</li>
-                <li>- Affected schemas: 2</li>
-                <li>- Affected tables: 4</li>
-                <li>
-Recommended Actions:</li>
-                <li>1. Verify all foreign key constraints before upgrade</li>
-                <li>2. Check for missing indexes on foreign key columns</li>
-                <li>3. Consider temporarily disabling foreign keys during upgrade</li>
-                <li>4. Take backup before modifying any constraints</li>
-                <li>5. Review update and delete rules for each constraint</li>
-                <li>6. Test referential integrity after upgrade</li>
-                <li>
-SQL Commands:</li>
-                <li>-- To disable foreign key checks during upgrade:</li>
-                <li>SET foreign_key_checks = 0;</li>
-                <li>-- Don't forget to re-enable after upgrade:</li>
-                <li>SET foreign_key_checks = 1;</li>
-            </ul>
+        <div class="success-message">
+            <span>✓</span>
+            <span>No issues found - this check passed successfully</span>
         </div>
     </div>
 </div>
-<div class="check-item amber">
+<div class="check-item green">
     <div class="check-header" onclick="toggleCheck(this)">
-        <div class="check-icon amber">
-            🟡
+        <div class="check-icon green">
+            🟢
         </div>
         <div class="check-title">
             <div class="check-name">Triggers and Views Check</div>
             <div class="check-description">Examines triggers and views for syntax changes, deprecated features, and complexity issues</div>
         </div>
-        <div class="check-badge amber">AMBER</div>
+        <div class="check-badge green">GREEN</div>
         <div class="expand-icon">▼</div>
     </div>
     <div class="check-content">
-        <div class="issues-section">
-            <div class="issues-title">⚠️ Issues Detected</div>
-            <ul class="issues-list">
-                <li>
-Triggers:</li>
-                <li>
-Schema: upgrade_test</li>
-                <li>  Trigger: before_parent_update
-    On Table: parent_table
-    Event: BEFORE UPDATE
-    Created: 2025-12-12 23:12:28.510000
-    Definer: admin@%
-    Character Set: utf8mb4
-</li>
-                <li>
-Schema: upgrade_test_good</li>
-                <li>  Trigger: trg_order_audit_insert
-    On Table: orders
-    Event: AFTER INSERT
-    Created: 2025-12-12 23:11:07.060000
-    Definer: admin@%
-    Character Set: utf8mb4
-</li>
-                <li>  Trigger: trg_order_audit_update
-    On Table: orders
-    Event: AFTER UPDATE
-    Created: 2025-12-12 23:11:07.140000
-    Definer: admin@%
-    Character Set: utf8mb4
-</li>
-                <li>
-Views:</li>
-                <li>
-Schema: upgrade_test</li>
-                <li>  View: user_auth
-    Updatable: YES
-    Security: DEFINER
-    Definer: admin@%
-    Character Set: utf8mb4
-    Potential Issues: Uses deprecated PASSWORD() function
-</li>
-                <li>
-Schema: upgrade_test_good</li>
-                <li>  View: customer_orders
-    Updatable: NO
-    Security: DEFINER
-    Definer: admin@%
-    Character Set: utf8mb4
-    Potential Issues: May need ANY_VALUE() for GROUP BY in 8.0
-</li>
-                <li>  View: product_inventory
-    Updatable: YES
-    Security: DEFINER
-    Definer: admin@%
-    Character Set: utf8mb4
-</li>
-            </ul>
-        </div>
-        <div class="recommendations-section">
-            <div class="recommendations-title">💡 Recommendations</div>
-            <ul class="recommendations-list">
-                <li>
-Summary:</li>
-                <li>- Total objects to review: 6</li>
-                <li>- Triggers: 3</li>
-                <li>- Views: 3</li>
-                <li>- Affected schemas: 2</li>
-                <li>
-Recommended Actions:</li>
-                <li>1. Review all triggers and views for 8.0 compatibility</li>
-                <li>2. Test triggers and views in upgrade simulation</li>
-                <li>3. Consider temporarily disabling triggers during upgrade</li>
-                <li>4. Take backup of all view and trigger definitions</li>
-                <li>5. Check for deprecated syntax in view definitions</li>
-                <li>6. Verify trigger privileges and security settings</li>
-                <li>7. Review view dependencies and updatability</li>
-                <li>
-Backup Commands:</li>
-                <li>-- To get trigger definitions:</li>
-                <li>SHOW TRIGGERS;</li>
-                <li>-- To get view definitions:</li>
-                <li>SHOW CREATE VIEW view_name;</li>
-                <li>
-Disabling/Enabling Triggers:</li>
-                <li>-- To disable triggers on a table:</li>
-                <li>ALTER TABLE table_name DISABLE TRIGGERS;</li>
-                <li>-- To enable triggers on a table:</li>
-                <li>ALTER TABLE table_name ENABLE TRIGGERS;</li>
-            </ul>
+        <div class="success-message">
+            <span>✓</span>
+            <span>No issues found - this check passed successfully</span>
         </div>
     </div>
 </div>
@@ -2429,8 +2057,6 @@ Disabling/Enabling Triggers:</li>
         <div class="recommendations-section">
             <div class="recommendations-title">💡 Recommendations</div>
             <ul class="recommendations-list">
-                <li>Review queries with mixed ORDER BY directions for descending index benefits</li>
-                <li>Found 6 JSON columns - review new JSON functions and multi-valued indexes</li>
                 <li>
 New Feature Opportunities in 8.0:</li>
                 <li>1. Hash Joins for better join performance</li>
@@ -2455,43 +2081,22 @@ Security Enhancements:</li>
         </div>
     </div>
 </div>
-<div class="check-item red">
+<div class="check-item green">
     <div class="check-header" onclick="toggleCheck(this)">
-        <div class="check-icon red">
-            🔴
+        <div class="check-icon green">
+            🟢
         </div>
         <div class="check-title">
             <div class="check-name">Reserved Keywords Conflicts</div>
             <div class="check-description">Identifies table and column names that conflict with new MySQL 8.0 reserved keywords</div>
         </div>
-        <div class="check-badge red">RED</div>
+        <div class="check-badge green">GREEN</div>
         <div class="expand-icon">▼</div>
     </div>
     <div class="check-content">
-        <div class="issues-section">
-            <div class="issues-title">⚠️ Issues Detected</div>
-            <ul class="issues-list">
-                <li>Table name 'upgrade_test.rank' conflicts with MySQL 8.0 reserved keyword</li>
-                <li>Table name 'upgrade_test.system' conflicts with MySQL 8.0 reserved keyword</li>
-                <li>Table name 'upgrade_test.window' conflicts with MySQL 8.0 reserved keyword</li>
-                <li>Column name 'upgrade_test.sales_data.groups' conflicts with MySQL 8.0 reserved keyword</li>
-                <li>Column name 'upgrade_test.sales_data.lag' conflicts with MySQL 8.0 reserved keyword</li>
-                <li>Column name 'upgrade_test.sales_data.lead' conflicts with MySQL 8.0 reserved keyword</li>
-                <li>Column name 'upgrade_test.sales_data.over' conflicts with MySQL 8.0 reserved keyword</li>
-            </ul>
-        </div>
-        <div class="recommendations-section">
-            <div class="recommendations-title">💡 Recommendations</div>
-            <ul class="recommendations-list">
-                <li>CRITICAL: Rename objects that conflict with reserved keywords before upgrading</li>
-                <li>Option 1 - Rename objects:</li>
-                <li>  ALTER TABLE schema.rank RENAME TO schema.rank_data;</li>
-                <li>  ALTER TABLE schema.table ALTER COLUMN rank RENAME TO rank_value;</li>
-                <li>Option 2 - Use backticks in all queries:</li>
-                <li>  SELECT * FROM `rank` WHERE `rank`.`rank` &gt; 10;</li>
-                <li>Note: Backticks are a workaround but renaming is recommended</li>
-                <li>Update application code to handle renamed objects</li>
-            </ul>
+        <div class="success-message">
+            <span>✓</span>
+            <span>No issues found - this check passed successfully</span>
         </div>
     </div>
 </div>
@@ -2515,7 +2120,7 @@ Security Enhancements:</li>
         <div class="recommendations-section">
             <div class="recommendations-title">💡 Recommendations</div>
             <ul class="recommendations-list">
-                <li>Found 2 partitioned tables - verify compatibility during testing</li>
+                <li>No partitioned tables found</li>
             </ul>
         </div>
     </div>
@@ -2545,36 +2150,27 @@ Security Enhancements:</li>
         </div>
     </div>
 </div>
-<div class="check-item amber">
+<div class="check-item green">
     <div class="check-header" onclick="toggleCheck(this)">
-        <div class="check-icon amber">
-            🟡
+        <div class="check-icon green">
+            🟢
         </div>
         <div class="check-title">
             <div class="check-name">JSON Usage and Optimization</div>
             <div class="check-description">Analyzes JSON column usage and recommends MySQL 8.0 JSON optimization opportunities</div>
         </div>
-        <div class="check-badge amber">AMBER</div>
+        <div class="check-badge green">GREEN</div>
         <div class="expand-icon">▼</div>
     </div>
     <div class="check-content">
-        <div class="issues-section">
-            <div class="issues-title">⚠️ Issues Detected</div>
-            <ul class="issues-list">
-                <li>Found 6 JSON columns (6 without indexes)</li>
-            </ul>
+        <div class="success-message">
+            <span>✓</span>
+            <span>No issues found - this check passed successfully</span>
         </div>
         <div class="recommendations-section">
             <div class="recommendations-title">💡 Recommendations</div>
             <ul class="recommendations-list">
-                <li>JSON Optimization Opportunities in MySQL 8.0:</li>
-                <li>- Consider multi-valued indexes for JSON array fields:</li>
-                <li>  CREATE INDEX idx ON table ((CAST(json_col-&gt;'$.array[*]' AS UNSIGNED ARRAY)));</li>
-                <li>- Use JSON_TABLE() for better query performance:</li>
-                <li>  SELECT * FROM table, JSON_TABLE(json_col, '$.path[*]' COLUMNS(...)) AS jt;</li>
-                <li>- Consider functional indexes for frequently queried JSON paths:</li>
-                <li>  CREATE INDEX idx ON table ((json_col-&gt;'$.field'));</li>
-                <li>- Test new JSON functions: JSON_OVERLAPS(), JSON_VALUE(), etc.</li>
+                <li>No JSON columns found in database</li>
             </ul>
         </div>
     </div>
@@ -2599,48 +2195,32 @@ Security Enhancements:</li>
         <div class="recommendations-section">
             <div class="recommendations-title">💡 Recommendations</div>
             <ul class="recommendations-list">
-                <li>Found 5 stored routines - all appear compatible</li>
+                <li>No stored routines found</li>
             </ul>
         </div>
     </div>
 </div>
-<div class="check-item red">
+<div class="check-item green">
     <div class="check-header" onclick="toggleCheck(this)">
-        <div class="check-icon red">
-            🔴
+        <div class="check-icon green">
+            🟢
         </div>
         <div class="check-title">
             <div class="check-name">Spatial Data SRID Requirements</div>
             <div class="check-description">Identifies spatial columns missing explicit SRID declarations required by MySQL 8.0</div>
         </div>
-        <div class="check-badge red">RED</div>
+        <div class="check-badge green">GREEN</div>
         <div class="expand-icon">▼</div>
     </div>
     <div class="check-content">
-        <div class="issues-section">
-            <div class="issues-title">⚠️ Issues Detected</div>
-            <ul class="issues-list">
-                <li>Spatial column 'upgrade_test.locations.area' (polygon) requires explicit SRID for MySQL 8.0</li>
-                <li>Spatial column 'upgrade_test.locations.coordinates' (point) requires explicit SRID for MySQL 8.0</li>
-            </ul>
+        <div class="success-message">
+            <span>✓</span>
+            <span>No issues found - this check passed successfully</span>
         </div>
         <div class="recommendations-section">
             <div class="recommendations-title">💡 Recommendations</div>
             <ul class="recommendations-list">
-                <li>CRITICAL: All spatial columns require explicit SRID in MySQL 8.0:</li>
-                <li>1. Add SRID to spatial columns:</li>
-                <li>   ALTER TABLE schema.table MODIFY COLUMN location POINT SRID 4326;</li>
-                <li>   (Common SRIDs: 4326 for WGS84 GPS coordinates, 0 for Cartesian)</li>
-                <li></li>
-                <li>2. Rebuild all spatial indexes after adding SRID:</li>
-                <li>   ALTER TABLE schema.table DROP INDEX spatial_idx;</li>
-                <li>   ALTER TABLE schema.table ADD SPATIAL INDEX spatial_idx(location);</li>
-                <li></li>
-                <li>3. Update application code to specify SRID:</li>
-                <li>   ST_GeomFromText('POINT(1 1)', 4326)</li>
-                <li>   ST_GeomFromWKB(wkb_data, 4326)</li>
-                <li></li>
-                <li>Found 2 spatial columns requiring SRID specification</li>
+                <li>No spatial data columns found</li>
             </ul>
         </div>
     </div>
@@ -2658,105 +2238,64 @@ Security Enhancements:</li>
         <div class="expand-icon">▼</div>
     </div>
     <div class="check-content">
-        <div class="issues-section">
-            <div class="issues-title">⚠️ Issues Detected</div>
-            <ul class="issues-list">
-                <li>Found 44 columns that could benefit from functional indexes</li>
-            </ul>
+        <div class="success-message">
+            <span>✓</span>
+            <span>No issues found - this check passed successfully</span>
         </div>
         <div class="recommendations-section">
             <div class="recommendations-title">💡 Recommendations</div>
             <ul class="recommendations-list">
-                <li>Functional Index Opportunities in MySQL 8.0:</li>
-                <li></li>
-                <li>1. For case-insensitive string searches:</li>
-                <li>   CREATE INDEX idx_name_lower ON table ((LOWER(name)));</li>
-                <li>   Then use: SELECT * FROM table WHERE LOWER(name) = 'value';</li>
-                <li></li>
-                <li>2. For date-based queries:</li>
-                <li>   CREATE INDEX idx_created_date ON table ((DATE(created_at)));</li>
-                <li>   CREATE INDEX idx_created_year ON table ((YEAR(created_at)));</li>
-                <li></li>
-                <li>3. For JSON path expressions:</li>
-                <li>   CREATE INDEX idx_json_field ON table ((json_col-&gt;'$.field'));</li>
-                <li>   CREATE INDEX idx_json_array ON table ((CAST(json_col-&gt;'$.array[*]' AS UNSIGNED ARRAY)));</li>
-                <li></li>
-                <li>Note: Test performance before deploying to production</li>
-                <li>Functional indexes work best for frequently executed queries</li>
+                <li>No obvious functional index opportunities identified</li>
             </ul>
         </div>
     </div>
 </div>
-<div class="check-item amber">
+<div class="check-item green">
     <div class="check-header" onclick="toggleCheck(this)">
-        <div class="check-icon amber">
-            🟡
+        <div class="check-icon green">
+            🟢
         </div>
         <div class="check-title">
             <div class="check-name">Index Statistics and Duplication</div>
             <div class="check-description">Detects duplicate indexes and low-cardinality indexes that impact performance</div>
         </div>
-        <div class="check-badge amber">AMBER</div>
+        <div class="check-badge green">GREEN</div>
         <div class="expand-icon">▼</div>
     </div>
     <div class="check-content">
-        <div class="issues-section">
-            <div class="issues-title">⚠️ Issues Detected</div>
-            <ul class="issues-list">
-                <li>Duplicate indexes on upgrade_test.inventory: 'idx_product' and 'idx_product_dup' (both on product_code)</li>
-                <li>Duplicate indexes on upgrade_test_good.user_accounts: 'idx_username' and 'username' (both on username)</li>
-            </ul>
+        <div class="success-message">
+            <span>✓</span>
+            <span>No issues found - this check passed successfully</span>
         </div>
         <div class="recommendations-section">
             <div class="recommendations-title">💡 Recommendations</div>
             <ul class="recommendations-list">
-                <li>Remove duplicate indexes to improve performance:</li>
-                <li>- Use MySQL 8.0 invisible indexes to test before dropping:</li>
-                <li>  ALTER TABLE schema.table ALTER INDEX index_name INVISIBLE;</li>
-                <li>  -- Monitor performance, then drop if no issues:</li>
-                <li>  DROP INDEX index_name ON schema.table;</li>
-                <li>Review 36 low-cardinality indexes for effectiveness</li>
+                <li>No secondary indexes found</li>
             </ul>
         </div>
     </div>
 </div>
-<div class="check-item red">
+<div class="check-item green">
     <div class="check-header" onclick="toggleCheck(this)">
-        <div class="check-icon red">
-            🔴
+        <div class="check-icon green">
+            🟢
         </div>
         <div class="check-title">
             <div class="check-name">Auto-Increment Exhaustion</div>
             <div class="check-description">Identifies auto-increment columns approaching their maximum values based on data type limits</div>
         </div>
-        <div class="check-badge red">RED</div>
+        <div class="check-badge green">GREEN</div>
         <div class="expand-icon">▼</div>
     </div>
     <div class="check-content">
-        <div class="issues-section">
-            <div class="issues-title">⚠️ Issues Detected</div>
-            <ul class="issues-list">
-                <li>CRITICAL: Table 'upgrade_test.orders_smallint' auto-increment at 91.6% capacity (60,000 of 65,535)</li>
-                <li>CRITICAL: Table 'upgrade_test.orders_tinyint' auto-increment at 94.1% capacity (240 of 255)</li>
-            </ul>
+        <div class="success-message">
+            <span>✓</span>
+            <span>No issues found - this check passed successfully</span>
         </div>
         <div class="recommendations-section">
             <div class="recommendations-title">💡 Recommendations</div>
             <ul class="recommendations-list">
-                <li>CRITICAL: Auto-increment exhaustion detected!</li>
-                <li></li>
-                <li>Immediate Actions:</li>
-                <li>1. Convert auto-increment columns to BIGINT:</li>
-                <li>   ALTER TABLE schema.table MODIFY COLUMN id BIGINT UNSIGNED AUTO_INCREMENT;</li>
-                <li></li>
-                <li>2. Run ANALYZE TABLE after modification:</li>
-                <li>   ANALYZE TABLE schema.table;</li>
-                <li></li>
-                <li>3. Consider data archiving to reset auto-increment:</li>
-                <li>   - Move old data to archive table</li>
-                <li>   - Drop and recreate original table</li>
-                <li></li>
-                <li>Found 2 tables requiring immediate attention</li>
+                <li>No auto-increment tables found</li>
             </ul>
         </div>
     </div>
